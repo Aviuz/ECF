@@ -3,7 +3,8 @@
 namespace ECF.Commands
 {
     [Command("exit")]
-    public class ExitCommand : ICommand
+    [CmdDescription("Exists the program")]
+    public class ExitCommand : CommandBase
     {
         private readonly InterfaceContext interfaceContext;
 
@@ -12,9 +13,7 @@ namespace ECF.Commands
             this.interfaceContext = interfaceContext;
         }
 
-        public void ApplyArguments(CommandArguments args) { }
-
-        public void Execute()
+        public override void Execute()
         {
             interfaceContext.ForceExit = true;
         }
