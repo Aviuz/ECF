@@ -4,9 +4,9 @@ using ECF.Utilities;
 namespace ECF.Commands
 {
     [Command("load-script")]
-    [CmdSyntax("[-r] [-f <FilePath>]")]
-    [CmdDescription("runs script from resource")]
-    [CmdParam("filepath", ShortName = "f", Description = "loads script from file specified in <FilePath>")]
+    [CmdSyntax("<FilePath>")]
+    [CmdDescription("runs script from file")]
+    [CmdArg("filepath", 0, Description = "loads script from file specified in <FilePath>")]
     public class LoadScriptCommand : CommandBase
     {
         private readonly InterfaceContext interfaceContext;
