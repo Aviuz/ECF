@@ -55,7 +55,7 @@ namespace ECF
                 .AddJsonFile(configurationFileName, false, true)
                 .Build();
 
-            ContainerBuilder.RegisterInstance(configuration);
+            ContainerBuilder.RegisterInstance<IConfiguration>(configuration);
 
             return this;
         }

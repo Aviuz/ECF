@@ -60,7 +60,7 @@ namespace ECF.Engine
                 for (int i = 0; i < args.Length; i++)
                 {
                     var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
-                    args[i] = Marshal.PtrToStringUni(p);
+                    args[i] = Marshal.PtrToStringUni(p)!;
                 }
 
                 return args;
