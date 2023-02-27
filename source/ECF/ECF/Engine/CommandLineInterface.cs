@@ -16,13 +16,13 @@ namespace ECF.Engine
             if (interfaceContext.CommandScope == null)
                 throw new ArgumentException("Cannot run command line interface without command scope.");
 
-            if(interfaceContext.CommandScope.Procesor == null)
+            if(interfaceContext.CommandScope.Processor == null)
                 throw new ArgumentException("Cannot run command line interface without procesor inside CommandScope. If you created your own CommandScope be sure to create ICommandProcesor and assign to Processor property.");
 
             if (args.Length > 0)
             {
                 interfaceContext.SilentMode = true;
-                interfaceContext.CommandScope.Procesor.Process(args);
+                interfaceContext.CommandScope.Processor.Process(args);
             }
             else
             {
@@ -34,7 +34,7 @@ namespace ECF.Engine
                     string? input = Console.ReadLine();
                     try
                     {
-                        interfaceContext.CommandScope.Procesor.Process(input);
+                        interfaceContext.CommandScope.Processor.Process(input);
                     }
                     catch (Exception ex)
                     {

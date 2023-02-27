@@ -9,22 +9,22 @@ namespace ECF
     /// </summary>
     public interface ICommandScope
     {
-        ICommandProcesor Procesor { get; }
+        ICommandProcesor Processor { get; }
     }
 
     /// <inheritdoc cref="ECF.ICommandScope"/>
     public class CommandScope : ICommandScope
     {
-        public ICommandProcesor Procesor { get; protected set; }
+        public ICommandProcesor Processor { get; protected set; }
 
         public CommandScope(IContainer container)
         {
-            Procesor = new CommandProcessor(container);
+            Processor = new CommandProcessor(container);
         }
 
         public CommandScope(ICommandProcesor commandProcesor)
         {
-            Procesor = commandProcesor;
+            Processor = commandProcesor;
         }
     }
 }

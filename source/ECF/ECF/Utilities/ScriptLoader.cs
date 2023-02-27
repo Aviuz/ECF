@@ -14,7 +14,7 @@ namespace ECF.Utilities
 
         public void Load(TextReader textReader)
         {
-            if (context?.CommandScope?.Procesor == null)
+            if (context?.CommandScope?.Processor == null)
                 throw new Exception("Cannot load script if CommandProcesor isn't initialized. InterfaceContext need to have CommandScope with processor attached.");
 
             string? line;
@@ -30,7 +30,7 @@ namespace ECF.Utilities
                 if (line.StartsWith("//"))
                     continue;
 
-                context.CommandScope.Procesor.Process(line);
+                context.CommandScope.Processor.Process(line);
             }
             while (line != null && !context.ForceExit);
         }
