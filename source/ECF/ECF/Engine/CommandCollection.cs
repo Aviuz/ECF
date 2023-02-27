@@ -5,29 +5,12 @@ namespace ECF.Engine
     /// <summary>
     /// Static reflection repository for command types and their command strings
     /// </summary>
-    public class CommandCollection<TCommandAttribute> where TCommandAttribute : Attribute, ICommandAttribute
+    public class CommandCollection
     {
-        private readonly Assembly[] assemblies;
         private HashSet<Type> commandTypes = new HashSet<Type>();
         private Dictionary<string, Type> commandBindings = new Dictionary<string, Type>();
 
-        internal CommandCollection(Assembly[] assemblies)
-        {
-            this.assemblies = assemblies;
-
-            foreach (var (commandType, attr) in CollectCommandTypes())
-            {
-                // add command to collection
-                commandTypes.Add(commandType);
-
-                // add bindings
-                commandBindings.Add(attr.Name.ToUpper(), commandType);
-                foreach (var alias in attr.Aliases)
-                    commandBindings.Add(alias.ToUpper(), commandType);
-            }
-        }
-
-        public Type GetCommand(string binding)
+        public Type? GetCommand(string binding)
         {
             binding = binding.ToUpper();
             if (!commandBindings.ContainsKey(binding))
@@ -40,20 +23,19 @@ namespace ECF.Engine
         {
             foreach (var commandType in commandTypes)
             {
-                yield return commandType.GetCustomAttribute<TCommandAttribute>();
+                yield return (ICommandAttribute)commandType.GetCustomAttributes().Where(x => typeof(ICommandAttribute).IsAssignableFrom(x.GetType())).First();
             }
         }
 
-        internal IEnumerable<(Type, ICommandAttribute)> CollectCommandTypes()
+        public void Register(ICommandAttribute commandAttribute, Type commandType)
         {
-            foreach(var assembly in assemblies)
-            foreach (var commandType in assembly.GetTypes())
-            {
-                var attr = commandType.GetCustomAttribute<TCommandAttribute>();
+            // add command to collection
+            commandTypes.Add(commandType);
 
-                if (attr != null)
-                    yield return (commandType, attr);
-            }
+            // add bindings
+            commandBindings[commandAttribute.Name.ToUpper()] = commandType;
+            foreach (var alias in commandAttribute.Aliases)
+                commandBindings[alias.ToUpper()] = commandType;
         }
     }
 }

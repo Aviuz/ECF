@@ -1,26 +1,18 @@
-﻿using Autofac;
-using Microsoft.Extensions.Configuration;
-
-namespace ECF.Example
+﻿namespace ECF.Example
 {
     class Program
     {
         static void Main(string[] args)
         {
-            new ECFConsoleProgram()
-                .Configure((ctx, services) =>
+            new ECFProgramBuilder()
+                .UseDefaultCommands()
+                .AddConfiguration()
+                .Configure((ctx, services, _) =>
                 {
                     ctx.Intro = $"This is example console application based on ECF v.{typeof(Program).Assembly.GetName().Version}\nType help to list available commands";
                     ctx.Prefix = ">";
-
-                    services.RegisterInstance(CreateConfiguration());
-                    services.RegisterCommands<CommandAttribute>();
                 })
-                .Start(args);
+                .Run(args);
         }
-
-        static IConfiguration CreateConfiguration() => new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", false, true)
-            .Build();
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace ECF.Exceptions
 {
-    public class ContainerException : Exception
+    public class ECFInitializationException : Exception
     {
-        private static string ExceptionMessage = "There was problem during container initialization. See inner exception for details.";
+        private static string ExceptionMessage = "There was problem during ECF initialization. See inner exception for details.";
 
-        public ContainerException(Exception innerException) : base(ExceptionMessage, innerException)
+        public ECFInitializationException(Exception innerException) : base(ExceptionMessage, innerException)
         {
         }
     }

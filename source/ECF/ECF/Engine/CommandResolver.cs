@@ -15,12 +15,12 @@ namespace ECF.Engine
     }
 
     /// <inheritdoc cref="ICommandResolver" />
-    public class CommandResolver<TCommandAttribute> : ICommandResolver where TCommandAttribute : Attribute, ICommandAttribute
+    public class CommandResolver : ICommandResolver
     {
         private readonly ILifetimeScope scope;
-        private readonly CommandCollection<TCommandAttribute> collection;
+        private readonly CommandCollection collection;
 
-        public CommandResolver(ILifetimeScope scope, CommandCollection<TCommandAttribute> collection)
+        public CommandResolver(ILifetimeScope scope, CommandCollection collection)
         {
             this.scope = scope;
             this.collection = collection;

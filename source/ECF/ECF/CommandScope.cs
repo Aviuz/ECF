@@ -7,11 +7,15 @@ namespace ECF
     /// This is class wraping CommandProcessor. It is dedicated to provide different command sets inside one application.
     /// By default there is created one default CommandScope with registered commands with [Command] attribute
     /// </summary>
-    public class CommandScope
+    public interface ICommandScope
     {
-        public ICommandProcesor? Procesor { get; protected set; }
+        ICommandProcesor Procesor { get; }
+    }
 
-        protected CommandScope() { }
+    /// <inheritdoc cref="ECF.ICommandScope"/>
+    public class CommandScope : ICommandScope
+    {
+        public ICommandProcesor Procesor { get; protected set; }
 
         public CommandScope(IContainer container)
         {
