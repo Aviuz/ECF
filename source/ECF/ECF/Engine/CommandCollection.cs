@@ -34,8 +34,9 @@ namespace ECF.Engine
 
             // add bindings
             commandBindings[commandAttribute.Name.ToUpper()] = commandType;
-            foreach (var alias in commandAttribute.Aliases)
-                commandBindings[alias.ToUpper()] = commandType;
+            if (commandAttribute.Aliases != null)
+                foreach (var alias in commandAttribute.Aliases)
+                    commandBindings[alias.ToUpper()] = commandType;
         }
     }
 }

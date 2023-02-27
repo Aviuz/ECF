@@ -10,22 +10,22 @@ namespace ECF
     {
         public ContainerBuilder ContainerBuilder { get; }
         public InterfaceContext InterfaceContext { get; }
-        public CommandRegistryBuilder ECFBuilder { get; }
+        public CommandRegistryBuilder RegistryBuilder { get; }
 
         public ECFProgramBuilder()
         {
             ContainerBuilder = new ContainerBuilder();
             InterfaceContext = new InterfaceContext();
-            ECFBuilder = new CommandRegistryBuilder(ContainerBuilder, InterfaceContext);
+            RegistryBuilder = new CommandRegistryBuilder(InterfaceContext, ContainerBuilder);
         }
 
         public ECFProgramBuilder UseDefaultCommands()
         {
             try
             {
-                ECFBuilder.RegisterCommands<CommandAttribute>(Assembly.GetExecutingAssembly());
-                ECFBuilder.RegisterCommands<CommandAttribute>(Assembly.GetCallingAssembly());
-                ECFBuilder.RegisterCommands<CommandAttribute>(Assembly.GetEntryAssembly()!);
+                RegistryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetExecutingAssembly());
+                RegistryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetCallingAssembly());
+                RegistryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetEntryAssembly()!);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace ECF
         {
             try
             {
-                configureAction(InterfaceContext, ContainerBuilder, ECFBuilder);
+                configureAction(InterfaceContext, ContainerBuilder, RegistryBuilder);
             }
             catch (Exception ex)
             {

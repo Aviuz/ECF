@@ -58,7 +58,7 @@ namespace ECF.Commands
             Console.WriteLine("Available commands:");
             foreach (var command in GetCommands())
             {
-                if (command.Aliases.Length > 0)
+                if (command.Aliases?.Length > 0)
                     Console.WriteLine($"\t{command.Name} ({string.Join(", ", command.Aliases)})");
                 else
                     Console.WriteLine($"\t{command.Name}");

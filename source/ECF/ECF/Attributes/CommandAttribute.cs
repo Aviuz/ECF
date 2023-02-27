@@ -4,7 +4,7 @@ namespace ECF
     public class CommandAttribute : Attribute, ICommandAttribute
     {
         public string Name { get; set; }
-        public string[] Aliases { get; }
+        public string[]? Aliases { get; }
 
         public CommandAttribute(string name, params string[] aliases)
         {

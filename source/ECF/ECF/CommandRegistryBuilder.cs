@@ -7,19 +7,29 @@ namespace ECF
 {
     public class CommandRegistryBuilder
     {
-        private readonly ContainerBuilder containerBuilder;
         private readonly CommandCollection collection;
 
-        public CommandRegistryBuilder(ContainerBuilder containerBuilder, InterfaceContext interfaceContext)
+        public ContainerBuilder ContainerBuilder { get; }
+        public InterfaceContext InterfaceContext { get; }
+
+        public CommandRegistryBuilder(InterfaceContext? interfaceContext = null, ContainerBuilder? containerBuilder = null)
         {
-            this.containerBuilder = containerBuilder;
+            if (interfaceContext != null)
+                InterfaceContext = interfaceContext;
+            else
+                InterfaceContext = new();
+
+            if (containerBuilder != null)
+                ContainerBuilder = containerBuilder;
+            else
+                ContainerBuilder = new();
 
             collection = new CommandCollection();
 
-            containerBuilder.RegisterInstance(interfaceContext);
-            containerBuilder.RegisterType<CommandResolver>().As<ICommandResolver>().SingleInstance();
-            containerBuilder.RegisterInstance(collection);
-            containerBuilder.RegisterType<CommandDispatcher>();
+            ContainerBuilder.RegisterInstance(InterfaceContext);
+            ContainerBuilder.RegisterType<CommandResolver>().As<ICommandResolver>().SingleInstance();
+            ContainerBuilder.RegisterInstance(collection);
+            ContainerBuilder.RegisterType<CommandDispatcher>();
         }
 
         public CommandRegistryBuilder RegisterCommands<TCommandAttribute>(params Assembly[] assemblies) where TCommandAttribute : Attribute, ICommandAttribute
@@ -29,9 +39,22 @@ namespace ECF
                 foreach (var (type, attr) in CollectCommandTypes<TCommandAttribute>(assembly))
                 {
                     collection.Register(attr, type);
-                    containerBuilder.RegisterType(type).InstancePerDependency();
+                    ContainerBuilder.RegisterType(type).InstancePerDependency();
                 }
             }
+
+            return this;
+        }
+
+        public CommandRegistryBuilder Register<TCommandAttribute>(Type type) where TCommandAttribute : Attribute, ICommandAttribute
+        {
+            var attribute = type.GetCustomAttribute<TCommandAttribute>();
+
+            if (attribute == null)
+                throw new ECF.Exceptions.ECFException($"Type {type.FullName} doesn't have attribute named {typeof(TCommandAttribute).FullName}");
+
+            collection.Register(attribute, type);
+            ContainerBuilder.RegisterType(type).InstancePerDependency();
 
             return this;
         }
