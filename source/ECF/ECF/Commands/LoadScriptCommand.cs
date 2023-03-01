@@ -6,7 +6,7 @@ namespace ECF.Commands
     [Command("load-script")]
     [CmdSyntax("<FilePath>")]
     [CmdDescription("runs script from file")]
-    [CmdArg("filepath", 0, Description = "loads script from file specified in <FilePath>")]
+    [CmdArgument("filepath", 0, Description = "loads script from file specified in <FilePath>")]
     public class LoadScriptCommand : CommandBase
     {
         private readonly InterfaceContext interfaceContext;

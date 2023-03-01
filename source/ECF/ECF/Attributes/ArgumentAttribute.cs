@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ECF
+﻿namespace ECF
 {
     /// <summary>
     /// Command Flag
@@ -9,17 +7,15 @@ namespace ECF
     /// 
     /// Note: If used on class that not implement BaseCommand it has no effects
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class CmdArgAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    public class ArgumentAttribute : Attribute
     {
-        public string Key { get; set; }
         public int Index { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
 
-        public CmdArgAttribute(string key, int index)
+        public ArgumentAttribute(int index)
         {
-            Key = key;
             Index = index;
         }
     }

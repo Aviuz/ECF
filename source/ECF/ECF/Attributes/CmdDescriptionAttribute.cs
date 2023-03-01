@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ECF
+﻿namespace ECF
 {
     /// <summary>
     /// Command Syntax

@@ -10,14 +10,14 @@ namespace ECF
     /// Note: If used on class that not implement BaseCommand it has no effects
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class CmdParamAttribute : Attribute
+    public class CmdParameterAttribute : Attribute
     {
         public string Key { get; set; }
-        public string ShortName { get; set; }
-        public string LongName { get; set; }
-        public string Description { get; set; }
+        public string? ShortName { get; set; }
+        public string? LongName { get; set; }
+        public string? Description { get; set; }
 
-        public CmdParamAttribute(string key)
+        public CmdParameterAttribute(string key)
         {
             Key = key;
         }

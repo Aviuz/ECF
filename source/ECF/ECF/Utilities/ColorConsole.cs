@@ -15,7 +15,7 @@ namespace ECF.Utilities
         public static void WriteLineRed(string value)
         {
             ConsoleColor oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(value);
             Console.ForegroundColor = oldColor;
         }

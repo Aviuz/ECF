@@ -7,17 +7,13 @@
     /// 
     /// Note: If used on class that not implement BaseCommand it has no effects
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class CmdFlagAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    public class FlagAttribute : Attribute
     {
-        public string Key { get; set; }
         public string? ShortName { get; set; }
         public string? LongName { get; set; }
         public string? Description { get; set; }
 
-        public CmdFlagAttribute(string key)
-        {
-            Key = key;
-        }
+        public FlagAttribute() { }
     }
 }
