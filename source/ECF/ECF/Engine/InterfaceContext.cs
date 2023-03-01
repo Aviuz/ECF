@@ -20,6 +20,11 @@
         public string? Intro { get; set; }
 
         /// <summary>
+        /// Intro text for help command that will be displayed when help command executes.
+        /// </summary>
+        public string? HelpIntro { get; set; }
+
+        /// <summary>
         /// If set to not to null it will redirect all input to specified interface.
         /// It only works in silent mode and in load-script command.
         /// </summary>

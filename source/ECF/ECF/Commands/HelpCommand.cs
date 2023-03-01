@@ -6,15 +6,17 @@ namespace ECF.Commands
     [Command("help")]
     public class HelpCommand : ICommand
     {
-        private string commandName;
+        private string? commandName;
 
         private readonly ICommandResolver commandResolver;
+        private readonly InterfaceContext interfaceContext;
         private readonly ILifetimeScope lifetimeScope;
 
-        public HelpCommand(ILifetimeScope lifetimeScope, ICommandResolver commandResolver)
+        public HelpCommand(ILifetimeScope lifetimeScope, ICommandResolver commandResolver, InterfaceContext interfaceContext)
         {
             this.lifetimeScope = lifetimeScope;
             this.commandResolver = commandResolver;
+            this.interfaceContext = interfaceContext;
         }
 
         public void ApplyArguments(CommandArguments args)
@@ -55,6 +57,12 @@ namespace ECF.Commands
 
         private void PrintAvailableCommands()
         {
+            if (!string.IsNullOrEmpty(interfaceContext.HelpIntro))
+            {
+                Console.WriteLine(interfaceContext.HelpIntro);
+                Console.WriteLine();
+            }
+
             Console.WriteLine("Available commands:");
             foreach (var command in GetCommands())
             {
@@ -63,6 +71,9 @@ namespace ECF.Commands
                 else
                     Console.WriteLine($"\t{command.Name}");
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Type 'help <command>' for more information about specific command");
         }
 
         private IEnumerable<ICommandAttribute> GetCommands()
