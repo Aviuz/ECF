@@ -6,20 +6,20 @@ using System.Reflection;
 
 namespace ECF
 {
-    public class ECFProgramBuilder
+    public class ECFHostBuilder
     {
         public ContainerBuilder ContainerBuilder { get; }
         public InterfaceContext InterfaceContext { get; }
         public CommandRegistryBuilder RegistryBuilder { get; }
 
-        public ECFProgramBuilder()
+        public ECFHostBuilder()
         {
             ContainerBuilder = new ContainerBuilder();
             InterfaceContext = new InterfaceContext();
             RegistryBuilder = new CommandRegistryBuilder(InterfaceContext, ContainerBuilder);
         }
 
-        public ECFProgramBuilder UseDefaultCommands()
+        public ECFHostBuilder UseDefaultCommands()
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ECF
             return this;
         }
 
-        public ECFProgramBuilder Configure(Action<InterfaceContext, ContainerBuilder, CommandRegistryBuilder> configureAction)
+        public ECFHostBuilder Configure(Action<InterfaceContext, ContainerBuilder, CommandRegistryBuilder> configureAction)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace ECF
             return this;
         }
 
-        public ECFProgramBuilder AddConfiguration(string configurationFileName = "appsettings.json")
+        public ECFHostBuilder AddConfiguration(string configurationFileName = "appsettings.json", bool optional = false)
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile(configurationFileName, false, true)
