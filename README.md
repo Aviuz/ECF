@@ -26,6 +26,8 @@ it will initialize and run your ECF console application
 
 2. You can now add your first command
 ```cs
+using ECF;
+
 [Command("hello-world")]
 class HelloWorldCommand : CommandBase
 {
@@ -34,7 +36,7 @@ class HelloWorldCommand : CommandBase
     [Parameter(ShortName = "n", LongName = "name", Description = "Your name")]
     public string Name { get; set; }
 
-    public ReadSettingsCommand(IConfiguration configuration)
+    public HelloWorldCommand(IConfiguration configuration)
     {
         // you can use constructor to inject services
         this.configuration = configuration;
@@ -83,4 +85,15 @@ and register commands manually:
     // ...
     registry.RegisterCommands<ECF.CommandAttribute>(System.Reflection.Assembly.GetExecutingAssembly());
 })
+```
+
+# Template
+You can use ECF template to create new projects. Firstly you need to install template:
+```
+dotnet new install ECF.Templates
+```
+
+Then you can create new projects using 
+```
+dotnet new ecf -o MyNewProject
 ```
