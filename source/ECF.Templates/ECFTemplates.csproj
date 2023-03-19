@@ -3,7 +3,7 @@
   <PropertyGroup>
     <PackageType>Template</PackageType>
     <Version>0.1.0</Version>
-    <PackageId>ECF.Templates</PackageId>
+    <PackageId>ECFTemplates</PackageId>
     <Title>ECF Templates</Title>
     <Authors>Aviuz</Authors>
     <Description>Templates to use when creating an application for ECF framework.</Description>

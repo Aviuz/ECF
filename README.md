@@ -90,7 +90,7 @@ and register commands manually:
 # Template
 You can use ECF template to create new projects. Firstly you need to install template:
 ```
-dotnet new install ECF.Templates
+dotnet new install ECFTemplates
 ```
 
 Then you can create new projects using 
