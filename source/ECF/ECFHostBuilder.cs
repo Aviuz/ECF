@@ -49,10 +49,10 @@ namespace ECF
             return this;
         }
 
-        public ECFHostBuilder AddConfiguration(string configurationFileName = "appsettings.json", bool optional = false)
+        public ECFHostBuilder AddConfiguration(string configurationFileName = "appsettings.json", bool optional = false, bool reloadOnChange = true)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(configurationFileName, false, true)
+                .AddJsonFile(configurationFileName, optional, reloadOnChange)
                 .Build();
 
             ContainerBuilder.RegisterInstance<IConfiguration>(configuration);
