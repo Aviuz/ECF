@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Microsoft",
+  "classifications": [ "Console" ],
+  "name": "Easy Console Framwork application",
+  "identity": "ECF",
+  "shortName": "ecf",
+  "description": "Easy Console Framwork application project template.",
+  "sourceName": "NewProject",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "symbols": {
+
+  }
+}
