@@ -1,3 +1,5 @@
+[![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF)
+
 # Easy Console Framework
 .NET Core library for easy building console application with command line parsing and inversion of control (IoC) powered by [Autofac](https://autofac.org).
 
@@ -6,7 +8,8 @@ It was designed for easy building application with multiple commands and low cou
 Currently only works on Windows due to `shell32.dll` dependency.
 
 # How to use
-1. Put in your *program.cs* this fragment:
+1. Install nuget package [ECF](https://nuget.org/packages/ECF)
+2. Put in your *program.cs* this fragment:
 ```cs
 // Program.cs
 using ECF;
@@ -24,7 +27,7 @@ new ECFHostBuilder()
 ```
 it will initialize and run your ECF console application
 
-2. You can now add your first command
+3. You can now add your first command
 ```cs
 using ECF;
 
@@ -54,13 +57,13 @@ class HelloWorldCommand : CommandBase
     }
 }
 ```
-3. Run your program
+4. Run your program
 you should see welcome info
 ```
 This is example console application based on ECF. Version 0.1.0.
 Type help to list available commands
 ```
-4. Invoke your command in console by typing 
+5. Invoke your command in console by typing 
 ```
 > hello-world -n John
 ```
