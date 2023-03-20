@@ -1,6 +1,4 @@
-[![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF)
-
-# Easy Console Framework
+# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF)
 .NET Core library for easy building console application with command line parsing and inversion of control (IoC) powered by [Autofac](https://autofac.org).
 
 It was designed for easy building application with multiple commands and low coupling.
