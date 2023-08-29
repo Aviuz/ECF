@@ -1,7 +1,10 @@
 [![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF)
 
 # Easy Console Framework
-.NET Core library for easy building console application with command line parsing and inversion of control (IoC) powered by [Autofac](https://autofac.org).
+.NET Core library for easy building console application with command line parsing and inversion of control (IoC).  
+  
+By default it's using Microsoft.Extensions.DependencyInjection, but can you can use alternatively [Autofac](https://autofac.org) by installing `EasyConsoleFramwork.Autofac` nuget package.
+To use this with custom IoC please refere to [Using custom IoC](#using-custom-IoC)
 
 It was designed for easy building application with multiple commands and low coupling.
 
@@ -68,6 +71,18 @@ Type help to list available commands
 > hello-world -n John
 ```
 
+# Template
+You can use ECF template to create new projects. Firstly you need to install template:
+```
+dotnet new install ECFTemplates
+```
+
+Then you can create new projects using 
+```
+dotnet new ecf -o MyNewProject
+```
+
+
 # Custom commands
 By default it will initialize all commands inside current and entry assembly with `[Command]` attribute. To change that you can register commands by calling `RegisterCommands(params Assembly[])` method:
 ```cs
@@ -90,13 +105,12 @@ and register commands manually:
 })
 ```
 
-# Template
-You can use ECF template to create new projects. Firstly you need to install template:
-```
-dotnet new install ECFTemplates
-```
-
-Then you can create new projects using 
-```
-dotnet new ecf -o MyNewProject
-```
+# Using custom IoC
+To configure ECF with custom IoC follow this steps:
+1. Install nuget package `EasyConsoleFramwork.Base`
+2. Implement IoC adapters
+    - `IIoCBuilderAdapter` - adapter for interacting with IoC when building (similar to `IServiceCollection`)
+    - `IIoCProviderAdapter` - adapter for resolving dependencies (similar to `IServiceProvider`)
+    - `IIoCScopeAdapter` - adapter for scopes, it's implementing `IDisposable` interface to dispose scope after it ends
+3. Create `ECFHostBuilderBase` with your `IIoCBuilderAdapter` implementation
+4. Other steps are similar to normal ECF application
