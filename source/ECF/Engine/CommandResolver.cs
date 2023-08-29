@@ -17,12 +17,12 @@ namespace ECF.Engine
     /// <inheritdoc cref="ICommandResolver" />
     public class CommandResolver : ICommandResolver
     {
-        private readonly IIoCScopeAdapter scope;
+        private readonly IIoCProviderAdapter iocProvider;
         private readonly CommandCollection collection;
 
-        public CommandResolver(IIoCScopeAdapter scope, CommandCollection collection)
+        public CommandResolver(IIoCProviderAdapter iocProvider, CommandCollection collection)
         {
-            this.scope = scope;
+            this.iocProvider = iocProvider;
             this.collection = collection;
         }
 
@@ -50,7 +50,7 @@ namespace ECF.Engine
 
         public ICommand Resolve(Type commandType)
         {
-            object resolvedObject = scope.Resolve(commandType);
+            object resolvedObject = iocProvider.Resolve(commandType);
 
             if (resolvedObject is ICommand command)
                 return command;

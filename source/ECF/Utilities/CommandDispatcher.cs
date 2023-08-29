@@ -4,16 +4,16 @@ namespace ECF.Utilities;
 
 public class CommandDispatcher
 {
-    private readonly IIoCScopeAdapter scope;
+    private readonly IIoCProviderAdapter iocProvider;
 
-    public CommandDispatcher(IIoCScopeAdapter scope)
+    public CommandDispatcher(IIoCProviderAdapter iocProvider)
     {
-        this.scope = scope;
+        this.iocProvider = iocProvider;
     }
 
     public void ExecuteCommand<T>(params string[] commandArgs) where T : ICommand
     {
-        using (var nestedScope = scope.BeginNestedScope())
+        using (var nestedScope = iocProvider.BeginNestedScope())
         {
             var command = nestedScope.Resolve<T>();
             command.ApplyArguments(new CommandArguments() { Arguments = commandArgs });

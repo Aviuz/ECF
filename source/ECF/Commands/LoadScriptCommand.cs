@@ -21,7 +21,11 @@ namespace ECF.Commands
         public override void Execute()
         {
             if (string.IsNullOrWhiteSpace(FilePath))
-                throw new NotImplementedException();
+            {
+                ColorConsole.WriteLine("You need to provide file path to script file", ConsoleColor.Red);
+                DisplayHelp();
+                return;
+            }
 
             ScriptLoader loader = new(interfaceContext);
 

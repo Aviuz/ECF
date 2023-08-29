@@ -11,16 +11,13 @@ public class CommandLineInterface
 
     public void Start(string[] args)
     {
-        if (interfaceContext.CommandScope == null)
-            throw new ArgumentException("Cannot run command line interface without command scope.");
-
-        if (interfaceContext.CommandScope.Processor == null)
-            throw new ArgumentException("Cannot run command line interface without procesor inside CommandScope. If you created your own CommandScope be sure to create ICommandProcesor and assign to Processor property.");
+        if (interfaceContext.CommandProcessor == null)
+            throw new ArgumentException("CommandProcessor is null. Cannot run command line interface without procesor inside InterfaceContext.");
 
         if (args.Length > 0)
         {
             interfaceContext.SilentMode = true;
-            interfaceContext.CommandScope.Processor.Process(args);
+            interfaceContext.CommandProcessor.Process(args);
         }
         else
         {
@@ -32,7 +29,7 @@ public class CommandLineInterface
                 string? input = Console.ReadLine();
                 try
                 {
-                    interfaceContext.CommandScope.Processor.Process(input);
+                    interfaceContext.CommandProcessor.Process(input);
                 }
                 catch (Exception ex)
                 {

@@ -28,6 +28,6 @@
         /// If set to not to null it will redirect all input to specified interface.
         /// It only works in silent mode and in load-script command.
         /// </summary>
-        public ICommandScope? CommandScope { get; set; }
+        public ICommandProcessor? CommandProcessor { get; set; }
     }
 }

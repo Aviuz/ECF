@@ -3,13 +3,13 @@ using ECF.Utilities;
 
 namespace ECF.Engine;
 
-public interface ICommandProcesor
+public interface ICommandProcessor
 {
     void Process(string? commandLine);
     void Process(string[] args);
 }
 
-public class CommandProcessor : ICommandProcesor
+public class CommandProcessor : ICommandProcessor
 {
     private readonly IIoCProviderAdapter iocProvider;
 
@@ -22,7 +22,7 @@ public class CommandProcessor : ICommandProcesor
 
     public void Process(string[] args)
     {
-        using (var scope = iocProvider.GetScope())
+        using (var scope = iocProvider.BeginNestedScope())
         {
             var resolver = scope.Resolve<ICommandResolver>();
 

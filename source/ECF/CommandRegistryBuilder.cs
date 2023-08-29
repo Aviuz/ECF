@@ -10,20 +10,13 @@ public class CommandRegistryBuilder
     private readonly CommandCollection collection  = new CommandCollection();
 
     public IIoCBuilderAdapter IoCBuilderAdapter { get; }
-    public InterfaceContext InterfaceContext { get; }
 
-    public CommandRegistryBuilder(IIoCBuilderAdapter containerBuilder, InterfaceContext? interfaceContext = null)
+    public CommandRegistryBuilder(IIoCBuilderAdapter iocBuilderAdapter)
     {
-        if (interfaceContext != null)
-            InterfaceContext = interfaceContext;
-        else
-            InterfaceContext = new();
+        IoCBuilderAdapter = iocBuilderAdapter;
 
-        IoCBuilderAdapter = containerBuilder;
-
-        IoCBuilderAdapter.RegisterIoCScopeAdapter();
+        IoCBuilderAdapter.RegisterIoCProviderAdapter();
         IoCBuilderAdapter.RegisterSingleton(collection);
-        IoCBuilderAdapter.RegisterSingleton(InterfaceContext);
         IoCBuilderAdapter.RegisterScoped<ICommandResolver, CommandResolver>();
         IoCBuilderAdapter.RegisterScoped<CommandDispatcher>();
     }
@@ -47,7 +40,7 @@ public class CommandRegistryBuilder
         var attribute = type.GetCustomAttribute<TCommandAttribute>();
 
         if (attribute == null)
-            throw new ECF.Exceptions.ECFException($"Type {type.FullName} doesn't have attribute named {typeof(TCommandAttribute).FullName}");
+            throw new Exceptions.ECFException($"Type {type.FullName} doesn't have attribute named {typeof(TCommandAttribute).FullName}");
 
         collection.Register(attribute, type);
         IoCBuilderAdapter.RegisterTransient(type);

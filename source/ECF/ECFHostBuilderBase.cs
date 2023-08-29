@@ -8,15 +8,17 @@ namespace ECF;
 
 public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderAdapter : class, IIoCBuilderAdapter<TDPBuilder> where TDPBuilder : class
 {
-    public TDPBuilderAdapter IoCBuilderAdapter { get; }
     public InterfaceContext InterfaceContext { get; }
+    public TDPBuilderAdapter IoCBuilderAdapter { get; }
     public CommandRegistryBuilder RegistryBuilder { get; }
 
     public ECFHostBuilderBase(TDPBuilderAdapter iocBuilderAdapter)
     {
-        IoCBuilderAdapter = iocBuilderAdapter;
         InterfaceContext = new InterfaceContext();
-        RegistryBuilder = new CommandRegistryBuilder(iocBuilderAdapter, InterfaceContext);
+        IoCBuilderAdapter = iocBuilderAdapter;
+        RegistryBuilder = new CommandRegistryBuilder(iocBuilderAdapter);
+
+        iocBuilderAdapter.RegisterSingleton(InterfaceContext);
     }
 
     public ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> UseDefaultCommands()
@@ -62,11 +64,8 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
 
     public void Run(string[] args)
     {
-        if (InterfaceContext.CommandScope == null)
-            InterfaceContext.CommandScope = new CommandScope(IoCBuilderAdapter.Build());
-
-        if (InterfaceContext.CommandScope == null)
-            throw new ArgumentException("There were no CommandScope initialized. Please use Configure(Action<InterfaceContext, ContainerBuilder>) method first, before starting program.");
+        if (InterfaceContext.CommandProcessor == null)
+            InterfaceContext.CommandProcessor = new CommandProcessor(IoCBuilderAdapter.Build());
 
         CommandLineInterface commandInterface = new(InterfaceContext);
 
