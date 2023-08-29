@@ -1,8 +1,9 @@
-# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg?label=ECF)](https://nuget.org/packages/ECF) [![NuGet](https://img.shields.io/nuget/v/ECFTemplates.svg?label=ECFTemplates)](https://nuget.org/packages/ECFTemplates) [![NuGet](https://img.shields.io/nuget/v/EasyConsoleFramework.Autofac.svg?label=EasyConsoleFramework.Autofac)](https://nuget.org/packages/EasyConsoleFramework.AutoFac)
+# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg?label=ECF)](https://nuget.org/packages/ECF) [![NuGet](https://img.shields.io/nuget/v/ECFTemplates.svg?label=ECFTemplates)](https://nuget.org/packages/ECFTemplates)
 .NET Core library for easy building console application with command line parsing and inversion of control (IoC).  
   
-By default it's using Microsoft.Extensions.DependencyInjection, but can you can use alternatively [Autofac](https://autofac.org) by installing `EasyConsoleFramwork.Autofac` nuget package.
-To use this with custom IoC please refere to [Using custom IoC](#using-custom-IoC)
+By default it's using `Microsoft.Extensions.DependencyInjection`.  
+To use [Autofac](https://autofac.org) please refer to [Using Autofac](#Using-Autofac).  
+To use this with custom IoC please refer to [Using custom IoC](#using-custom-IoC)
 
 It was designed for easy building application with multiple commands and low coupling.
 
@@ -101,6 +102,25 @@ and register commands manually:
     // ...
     registry.RegisterCommands<ECF.CommandAttribute>(System.Reflection.Assembly.GetExecutingAssembly());
 })
+```
+
+# Using Autofac
+To use ECF with [Autofac](https://autofac.org) install [EasyConsoleFramwork.Autofac](https://nuget.org/packages/EasyConsoleFramework.AutoFac) package.
+Startup code look very similar with only namespace change:
+```cs
+// Program.cs
+using ECF.Autofac;
+
+new ECFHostBuilder()
+    .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
+    .AddConfiguration(optional: true) // adds appsettings.json        
+    .Configure((ctx, services, _) =>
+    {
+        ctx.Intro = $"This is example console application based on ECF. Version {typeof(Program).Assembly.GetName().Version}.\nType help to list available commands";
+        ctx.HelpIntro = "Welcome to example program that showcases ECF framework. Enter one of command listed below";
+        ctx.Prefix = ">";
+    })
+    .Run(args);
 ```
 
 # Using custom IoC
