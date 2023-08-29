@@ -1,6 +1,6 @@
 ﻿using ECF;
 using ECF.Engine;
-using ECF.Microsoft.DependencyInjection.Adapters;
+using ECF.Adapters;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

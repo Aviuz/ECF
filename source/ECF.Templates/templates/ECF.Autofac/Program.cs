@@ -1,8 +1,8 @@
-﻿using ECF;
+﻿using ECF.Autofac;
 
 new ECFHostBuilder()
-    .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
-    .AddConfiguration(optional: true) // adds appsettings.json        
+    .UseDefaultCommands() // register all commands with CommandAttribute, and default commands (help, exit, ...)
+    .AddConfiguration(optional: true) // adds appsettings.json  
     .Configure((ctx, services, _) =>
     {
         ctx.Intro = $"This is example console application based on ECF. Version {typeof(Program).Assembly.GetName().Version}.\nType help to list available commands";

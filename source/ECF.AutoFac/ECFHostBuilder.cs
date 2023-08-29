@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using ECF.AutoFac.Adapters;
+using ECF.Autofac.Adapters;
 
-namespace ECF.AutoFac;
+namespace ECF.Autofac;
 
-public class ECFHostBuilder : ECFHostBuilderBase<AutoFacContainerBuilderAdapter, ContainerBuilder>
+public class ECFHostBuilder : ECFHostBuilderBase<AutofacContainerBuilderAdapter, ContainerBuilder>
 {
-    public ECFHostBuilder() : base(new AutoFacContainerBuilderAdapter(new ContainerBuilder())) { }
+    public ECFHostBuilder() : base(new AutofacContainerBuilderAdapter(new ContainerBuilder())) { }
 }

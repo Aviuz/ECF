@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace ECF.Microsoft.DependencyInjection.Adapters;
+namespace ECF.Adapters;
 
 public class MicrosoftServiceProviderAdapter : IIoCProviderAdapter
 {

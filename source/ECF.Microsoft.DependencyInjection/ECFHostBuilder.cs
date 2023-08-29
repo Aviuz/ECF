@@ -1,7 +1,7 @@
-﻿using ECF.Microsoft.DependencyInjection.Adapters;
+﻿using ECF.Adapters;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ECF.Microsoft.DependencyInjection;
+namespace ECF;
 
 public class ECFHostBuilder : ECFHostBuilderBase<MicrosoftServiceCollectionAdapter, IServiceCollection>
 {

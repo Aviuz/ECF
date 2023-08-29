@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ECF" Version="0.2.1" />
+    <PackageReference Include="EasyConsoleFramework.Autofac" Version="0.2.1" />
   </ItemGroup>
 
   <ItemGroup>

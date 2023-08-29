@@ -1,7 +1,7 @@
 ﻿using ECF;
 
 new ECFHostBuilder()
-    .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
+    .UseDefaultCommands() // register all commands with CommandAttribute, and default commands (help, exit, ...)
     .AddConfiguration(optional: true) // adds appsettings.json  
     .Configure((ctx, services, _) =>
     {

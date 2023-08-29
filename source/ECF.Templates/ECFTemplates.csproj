@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <Version>0.1.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>ECFTemplates</PackageId>
     <Title>ECF Templates</Title>
     <Authors>Aviuz</Authors>
@@ -18,6 +18,10 @@
   <ItemGroup>
     <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
     <Compile Remove="**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="templates\ECF.Autofac\appsettings.json" />
   </ItemGroup>
 
 </Project>

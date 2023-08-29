@@ -1,7 +1,7 @@
 ﻿using ECF.InverseOfControl;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ECF.Microsoft.DependencyInjection.Adapters;
+namespace ECF.Adapters;
 
 public class MicrosoftServiceCollectionAdapter : IIoCBuilderAdapter<IServiceCollection>
 {

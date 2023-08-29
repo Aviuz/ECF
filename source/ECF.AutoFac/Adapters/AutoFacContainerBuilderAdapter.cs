@@ -1,13 +1,13 @@
 ﻿using Autofac;
 using ECF.InverseOfControl;
 
-namespace ECF.AutoFac.Adapters;
+namespace ECF.Autofac.Adapters;
 
-public class AutoFacContainerBuilderAdapter : IIoCBuilderAdapter<ContainerBuilder>
+public class AutofacContainerBuilderAdapter : IIoCBuilderAdapter<ContainerBuilder>
 {
     private readonly ContainerBuilder containerBuilder;
 
-    public AutoFacContainerBuilderAdapter(ContainerBuilder containerBuilder)
+    public AutofacContainerBuilderAdapter(ContainerBuilder containerBuilder)
     {
         this.containerBuilder = containerBuilder;
     }

@@ -3,9 +3,9 @@
   "author": "Microsoft",
   "classifications": [ "Console" ],
   "name": "Easy Console Framwork application",
-  "identity": "ECF",
-  "shortName": "ecf",
-  "description": "Easy Console Framwork application project template, with Microsoft.Extensions.DependencyInjection integrated.",
+  "identity": "ECF.Autofac",
+  "shortName": "ecf-autofac",
+  "description": "Easy Console Framwork application project template, with Autofac integrated.",
   "sourceName": "NewProject",
   "tags": {
     "language": "C#",

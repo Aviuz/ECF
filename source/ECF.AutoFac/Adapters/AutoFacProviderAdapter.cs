@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using ECF.InverseOfControl;
 
-namespace ECF.AutoFac.Adapters;
+namespace ECF.Autofac.Adapters;
 
 public class AutoFacProviderAdapter : IIoCProviderAdapter
 {
