@@ -7,16 +7,16 @@ namespace Example.Commands
     [CmdParameter("param1", Description = "param1 desc", ShortName = "p", LongName = "param")]
     [CmdFlag("flag1", ShortName = "f", LongName = "flag", Description = "Flag description")]
     [CmdFlag("flag4", ShortName = "f4", Description = "Flag4 description")]
-    [CmdArgument("arg2", 3, Name = "Arg 2", Description = "arg2 description")]
+    [CmdArgument("arg3", 2, Name = "Arg 3", Description = "arg3 description")]
     internal class TestBinding : CommandBase
     {
         public string? Arg1 => GetValue("arg1");
-        public string? Arg2 => GetValue("arg2");
+        public string? Arg3 => GetValue("arg3");
         public bool Flag1 => IsFlagActive("flag1");
         public string? Param1 => GetValue("param1");
 
-        [Argument(1, Description = "Arg3 Desciption", Name = "arg 3")]
-        public string? Arg3 { get; set; }
+        [Argument(1, Description = "Arg2 Desciption", Name = "arg 2")]
+        public string? Arg2 { get; set; }
         [Parameter(ShortName = "p2", LongName = "param2", Description = "Param2 description")]
         public string? Param2 { get; set; }
         [Flag(ShortName = "f2", LongName = "flag2", Description = "Flag2 description")]

@@ -18,9 +18,12 @@ namespace Example.Commands
 
         public override void Execute()
         {
+            ColorConsole.WriteLine($"loading scripts from {nameof(Resources.ExampleScript)}...", ConsoleColor.DarkGray);
+            ColorConsole.WriteLine(Resources.ExampleScript, ConsoleColor.DarkGray);
+
             var loader = new ScriptLoader(interfaceContext);
 
-            using (var reader = new StringReader(Resources.ExampleSctipt))
+            using (var reader = new StringReader(Resources.ExampleScript))
             {
                 loader.Load(reader);
             }

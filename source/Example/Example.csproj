@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECF\ECF.csproj" />
+    <ProjectReference Include="..\ECF.Microsoft.DependencyInjection\ECF.Microsoft.DependencyInjection.csproj" />
   </ItemGroup>
 
   <ItemGroup>

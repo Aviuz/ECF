@@ -1,82 +1,76 @@
 ﻿using ECF;
 using ECF.Commands;
 using ECF.Engine;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Example
+namespace Example;
+
+// We can use diffrent attribute to seperate commands inside same assembly
+public class DirectionCommandAttribute : Attribute, ICommandAttribute
 {
-    // We can use diffrent attribute to seperate commands inside same assembly
-    public class DirectionCommandAttribute : Attribute, ICommandAttribute
+    public string[]? Aliases { get; set; }
+
+    public string Name { get; set; }
+
+    public DirectionCommandAttribute(string name)
     {
-        public string[]? Aliases { get; set; }
+        Name = name;
+    }
+}
 
-        public string Name { get; set; }
+// This command will switch to new scope. It's need to be visible inside previous scope.
+[Command("directions")]
+public class SwitchToDirectionContextCommand : CommandBase
+{
+    private readonly InterfaceContext interfaceContext;
 
-        public DirectionCommandAttribute(string name)
-        {
-            Name = name;
-        }
+    public SwitchToDirectionContextCommand(InterfaceContext interfaceContext)
+    {
+        this.interfaceContext = interfaceContext;
     }
 
-    public class DirectionCommandsScope : ICommandScope
+    public override void Execute()
     {
-        public ICommandProcesor Processor { get; }
-
-        public DirectionCommandsScope(InterfaceContext interfaceContext)
-        {
-            // when using alternative scope, we need to build command registry manually
-            var registryBuilder = new CommandRegistryBuilder(interfaceContext);
-            // we can register all commands with specified attribute in specified assembly
-            registryBuilder.RegisterCommands<DirectionCommandAttribute>(Assembly.GetExecutingAssembly());
-
-            // this line will register basic commands as HelpCommand, LoadCommand etc.
-            registryBuilder.RegisterCommands<CommandAttribute>(typeof(HelpCommand).Assembly);
-
-            // alternatively you can always register commands seperatly one by one
-            registryBuilder.Register<CommandAttribute>(typeof(ExitCommand));
-
-            // at the end we need to construct CommandProcesor which will process command requests
-            Processor = new CommandProcessor(registryBuilder.ContainerBuilder.Build());
-        }
+        interfaceContext.Prefix = "$"; // we can also change prefix
+        interfaceContext.CommandProcessor = CreateDirectionCommandsProcessor(interfaceContext);
     }
 
-    // This command will switch to new scope. It's need to be visible inside previous scope.
-    [Command("directions")]
-    public class SwitchToDirectionContextCommand : CommandBase
+    public ICommandProcessor CreateDirectionCommandsProcessor(InterfaceContext interfaceContext)
     {
-        private readonly InterfaceContext interfaceContext;
+        // CommandProcessors hold IoC containers to maintain seperate collection of services
+        var services = new ServiceCollection();
+        services.AddSingleton(interfaceContext); // remember to always include interfaceContext inside IoC
 
-        public SwitchToDirectionContextCommand(InterfaceContext interfaceContext)
-        {
-            this.interfaceContext = interfaceContext;
-        }
+        services
+            .AddECFCommandRegistry() // when using alternative scope, we need to build command registry manually
+            .RegisterCommands<DirectionCommandAttribute>(Assembly.GetExecutingAssembly()) // we can register all commands with specified attribute in specified assembly
+            .RegisterCommands<CommandAttribute>(typeof(HelpCommand).Assembly) // this line will register basic commands as HelpCommand, LoadCommand etc.
+            .Register<CommandAttribute>(typeof(ExitCommand)); // alternatively you can always register commands seperatly one by one
 
-        public override void Execute()
-        {
-            interfaceContext.Prefix = "$"; // we can also change prefix
-            interfaceContext.CommandScope = new DirectionCommandsScope(interfaceContext);
-        }
+        // at the end we need to construct CommandProcesor which will process command requests
+        return services.BuildAndCreateECFCommandProcessor();
     }
+}
 
-    [DirectionCommand("left")]
-    public class LeftCommand : ICommand
+[DirectionCommand("left")]
+public class LeftCommand : ICommand
+{
+    public void ApplyArguments(CommandArguments args) { }
+
+    public void Execute()
     {
-        public void ApplyArguments(CommandArguments args) { }
-
-        public void Execute()
-        {
-            Console.WriteLine("<<<<<");
-        }
+        Console.WriteLine("<<<<<");
     }
+}
 
-    [DirectionCommand("right")]
-    public class RightCommand : ICommand
+[DirectionCommand("right")]
+public class RightCommand : ICommand
+{
+    public void ApplyArguments(CommandArguments args) { }
+
+    public void Execute()
     {
-        public void ApplyArguments(CommandArguments args) { }
-
-        public void Execute()
-        {
-            Console.WriteLine(">>>>>>");
-        }
+        Console.WriteLine(">>>>>>");
     }
 }

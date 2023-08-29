@@ -64,9 +64,9 @@ namespace Example.Properties {
         ///   Looks up a localized string similar to help
         ///help exit.
         /// </summary>
-        internal static string ExampleSctipt {
+        internal static string ExampleScript {
             get {
-                return ResourceManager.GetString("ExampleSctipt", resourceCulture);
+                return ResourceManager.GetString("ExampleScript", resourceCulture);
             }
         }
     }

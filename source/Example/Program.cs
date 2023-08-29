@@ -1,4 +1,4 @@
-﻿using ECF;
+﻿using ECF.Microsoft.DependencyInjection;
 
 new ECFHostBuilder()
     .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
