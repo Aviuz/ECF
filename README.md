@@ -1,8 +1,4 @@
-[![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF)
-[![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECFTemplates)
-[![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/EasyConsoleFramework.AutoFac)
-
-# Easy Console Framework
+# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECF) [![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/ECFTemplates) [![NuGet](https://img.shields.io/nuget/v/ECF.svg)](https://nuget.org/packages/EasyConsoleFramework.AutoFac)
 .NET Core library for easy building console application with command line parsing and inversion of control (IoC).  
   
 By default it's using Microsoft.Extensions.DependencyInjection, but can you can use alternatively [Autofac](https://autofac.org) by installing `EasyConsoleFramwork.Autofac` nuget package.
@@ -116,3 +112,8 @@ To configure ECF with custom IoC follow this steps:
     - `IIoCScopeAdapter` - adapter for scopes, it's implementing `IDisposable` interface to dispose scope after it ends
 3. Create `ECFHostBuilderBase` with your `IIoCBuilderAdapter` implementation
 4. Other steps are similar to normal ECF application
+
+Then you can create new projects using 
+```
+dotnet new ecf -o MyNewProject
+```
