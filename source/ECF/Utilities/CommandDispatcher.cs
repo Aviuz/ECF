@@ -1,24 +1,23 @@
-﻿using Autofac;
+﻿using ECF.InverseOfControl;
 
-namespace ECF.Utilities
+namespace ECF.Utilities;
+
+public class CommandDispatcher
 {
-    public class CommandDispatcher
+    private readonly IIoCScopeAdapter scope;
+
+    public CommandDispatcher(IIoCScopeAdapter scope)
     {
-        private readonly ILifetimeScope lifetimeScope;
+        this.scope = scope;
+    }
 
-        public CommandDispatcher(ILifetimeScope lifetimeScope)
+    public void ExecuteCommand<T>(params string[] commandArgs) where T : ICommand
+    {
+        using (var nestedScope = scope.BeginNestedScope())
         {
-            this.lifetimeScope = lifetimeScope;
-        }
-
-        public void ExecuteCommand<T>(params string[] commandArgs) where T : ICommand
-        {
-            using (var nestedScope = lifetimeScope.BeginLifetimeScope())
-            {
-                var command = nestedScope.Resolve<T>();
-                command.ApplyArguments(new CommandArguments() { Arguments = commandArgs });
-                command.Execute();
-            }
+            var command = nestedScope.Resolve<T>();
+            command.ApplyArguments(new CommandArguments() { Arguments = commandArgs });
+            command.Execute();
         }
     }
 }

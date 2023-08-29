@@ -1,5 +1,5 @@
-﻿using Autofac;
-using ECF.Commands;
+﻿using ECF.Commands;
+using ECF.InverseOfControl;
 
 namespace ECF.Engine
 {
@@ -17,10 +17,10 @@ namespace ECF.Engine
     /// <inheritdoc cref="ICommandResolver" />
     public class CommandResolver : ICommandResolver
     {
-        private readonly ILifetimeScope scope;
+        private readonly IIoCScopeAdapter scope;
         private readonly CommandCollection collection;
 
-        public CommandResolver(ILifetimeScope scope, CommandCollection collection)
+        public CommandResolver(IIoCScopeAdapter scope, CommandCollection collection)
         {
             this.scope = scope;
             this.collection = collection;
