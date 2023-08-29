@@ -26,21 +26,21 @@ public class AutoFacContainerBuilderAdapter : IIoCBuilderAdapter<ContainerBuilde
 
     public IIoCProviderAdapter Build()
     {
-        return new AutoFacContainerAdapter(containerBuilder.Build());
+        return new AutoFacProviderAdapter(containerBuilder.Build());
     }
 
-    public void RegisterScoped<TService>() where TService : notnull
+    public void RegisterScoped<TService>() where TService : class
     {
         containerBuilder.RegisterType<TService>().InstancePerLifetimeScope();
     }
 
-    public void RegisterScoped<TInterface, TService>() where TInterface : notnull where TService : notnull
+    public void RegisterScoped<TInterface, TService>() where TInterface : class where TService : class, TInterface
     {
         containerBuilder.RegisterType<TService>().As<TInterface>().InstancePerLifetimeScope();
     }
 
-    public void RegisterIoCScopeAdapter()
+    public void RegisterIoCProviderAdapter()
     {
-        containerBuilder.RegisterType<AutoFacScopeAdapter>().As<IIoCScopeAdapter>().InstancePerDependency();
+        containerBuilder.RegisterType<AutoFacProviderAdapter>().As<IIoCProviderAdapter>().InstancePerDependency();
     }
 }
