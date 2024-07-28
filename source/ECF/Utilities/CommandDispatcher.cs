@@ -16,7 +16,10 @@ public class CommandDispatcher
         using (var nestedScope = iocProvider.BeginNestedScope())
         {
             var command = nestedScope.Resolve<T>();
-            command.ApplyArguments(new CommandArguments() { Arguments = commandArgs });
+            command.ApplyArguments(new CommandArguments(
+                commandName: string.Empty,
+                arguments: commandArgs
+            ));
             command.Execute();
         }
     }

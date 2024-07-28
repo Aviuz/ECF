@@ -44,5 +44,9 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Arguments";
+
+        public int GetOrder() => attribute.Index;
+
+        public string GetSyntaxToken() => $"<{attribute.Name}>";
     }
 }

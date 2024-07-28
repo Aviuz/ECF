@@ -34,10 +34,9 @@ public class CommandProcessor : ICommandProcessor
 
     private CommandArguments ParseArguments(string[] args)
     {
-        return new CommandArguments()
-        {
-            CommandName = args[0],
-            Arguments = args.Skip(1).ToArray(),
-        };
+        return new CommandArguments(
+            commandName: args[0],
+            arguments: args.Skip(1).ToArray()
+        );
     }
 }

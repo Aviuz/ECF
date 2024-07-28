@@ -41,5 +41,11 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Flags";
+
+        public int GetOrder() => int.MaxValue;
+
+        public string GetSyntaxToken() => !string.IsNullOrWhiteSpace(attribute.LongName) 
+            ? "--" + attribute.LongName
+            : "-" + attribute.ShortName;
     }
 }

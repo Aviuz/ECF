@@ -45,5 +45,17 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Parameters";
+
+        public int GetOrder() => int.MaxValue - 1;
+
+        public string? GetSyntaxToken()
+        {
+            if(!string.IsNullOrEmpty(attribute.LongName)) 
+                return $"--{attribute.LongName} <value>";
+            else if(string.IsNullOrEmpty(attribute.ShortName))
+                return $"-{attribute.ShortName} <value>";
+            else
+                return null;
+        }
     }
 }

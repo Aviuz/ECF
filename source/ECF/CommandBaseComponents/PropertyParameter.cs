@@ -1,5 +1,4 @@
 ﻿using ECF.Exceptions;
-using ECF.Utilities;
 using System.Reflection;
 using System.Text;
 
@@ -7,13 +6,13 @@ namespace ECF.CommandBaseComponents
 {
     internal class PropertyParameter : ICommandBaseParameter
     {
-        private readonly CommandBase command;
+        private readonly object parent;
         private readonly PropertyInfo propertyInfo;
         private readonly ParameterAttribute attribute;
 
-        public PropertyParameter(CommandBase command, PropertyInfo propertyInfo, ParameterAttribute attribute)
+        public PropertyParameter(object parent, PropertyInfo propertyInfo, ParameterAttribute attribute)
         {
-            this.command = command;
+            this.parent = parent;
             this.propertyInfo = propertyInfo;
             this.attribute = attribute;
         }
@@ -35,7 +34,7 @@ namespace ECF.CommandBaseComponents
             string? value = visitor.Take(true);
             try
             {
-                propertyInfo.SetValue(command, Convert.ChangeType(value, propertyInfo.PropertyType));
+                propertyInfo.SetValue(parent, Convert.ChangeType(value, propertyInfo.PropertyType));
             }
             catch (FormatException)
             {
@@ -59,5 +58,17 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Parameters";
+
+        public int GetOrder() => int.MaxValue - 1;
+
+        public string? GetSyntaxToken()
+        {
+            if (!string.IsNullOrEmpty(attribute.LongName))
+                return $"--{attribute.LongName} <value>";
+            else if (string.IsNullOrEmpty(attribute.ShortName))
+                return $"-{attribute.ShortName} <value>";
+            else
+                return null;
+        }
     }
 }

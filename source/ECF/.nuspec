@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>EasyConsoleFramework.Base</id>
-        <version>0.2.0</version>
+        <version>0.2.2</version>
         <description>Easy Console Framewok - Framework for building command based IoC console application. This package is base library without any IoC dependency.</description>
         <authors>Aviuz</authors>
         <tags>console IoC ecf</tags>
@@ -24,6 +24,10 @@
             <group targetFramework="net7">
                 <dependency id="Microsoft.Extensions.Configuration.Json" version="7.0.0" />
             </group>
+
+			<group targetFramework="net8">
+				<dependency id="Microsoft.Extensions.Configuration.Json" version="8.0.0" />
+			</group>
         </dependencies>
     </metadata>
 
@@ -37,5 +41,9 @@
         <file src="bin\Release\net7.0\ECF.Base.dll" target="lib\net7.0" />
         <file src="bin\Release\net7.0\ECF.Base.pdb" target="lib\net7.0" />
         <file src="bin\Release\net7.0\ECF.Base.deps.json" target="lib\net7.0" />
+
+		<file src="bin\Release\net8.0\ECF.Base.dll" target="lib\net8.0" />
+		<file src="bin\Release\net8.0\ECF.Base.pdb" target="lib\net8.0" />
+		<file src="bin\Release\net8.0\ECF.Base.deps.json" target="lib\net8.0" />
     </files>
 </package>

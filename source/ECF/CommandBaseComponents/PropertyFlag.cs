@@ -6,13 +6,13 @@ namespace ECF.CommandBaseComponents
 {
     internal class PropertyFlag : ICommandBaseParameter
     {
-        private readonly CommandBase command;
+        private readonly object parent;
         private readonly PropertyInfo propertyInfo;
         private readonly FlagAttribute attribute;
 
-        public PropertyFlag(CommandBase command, PropertyInfo propertyInfo, FlagAttribute attribute)
+        public PropertyFlag(object parent, PropertyInfo propertyInfo, FlagAttribute attribute)
         {
-            this.command = command;
+            this.parent = parent;
             this.propertyInfo = propertyInfo;
             this.attribute = attribute;
         }
@@ -32,7 +32,7 @@ namespace ECF.CommandBaseComponents
             if (propertyInfo.PropertyType != typeof(bool))
                 throw new CommandBaseParseException($"Property {propertyInfo.Name} need to be of type bool to be treated as flag.");
 
-            propertyInfo.SetValue(command, true);
+            propertyInfo.SetValue(parent, true);
         }
 
         public void AppendHelp(StringBuilder sb)
@@ -51,5 +51,11 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Flags";
+
+        public int GetOrder() => int.MaxValue;
+
+        public string GetSyntaxToken() => !string.IsNullOrWhiteSpace(attribute.LongName)
+            ? "--" + attribute.LongName
+            : "-" + attribute.ShortName;
     }
 }

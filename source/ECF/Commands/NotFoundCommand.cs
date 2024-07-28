@@ -2,7 +2,7 @@
 {
     public class NotFoundCommand : ICommand
     {
-        private string commandName;
+        private string? commandName;
 
         public void ApplyArguments(CommandArguments args)
         {

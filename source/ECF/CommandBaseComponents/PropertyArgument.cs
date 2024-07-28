@@ -5,13 +5,13 @@ namespace ECF.CommandBaseComponents
 {
     internal class PropertyArgument : ICommandBaseParameter
     {
-        private readonly CommandBase command;
+        private readonly object parent;
         private readonly PropertyInfo propertyInfo;
         private readonly ArgumentAttribute attribute;
 
-        public PropertyArgument(CommandBase command, PropertyInfo propertyInfo, ArgumentAttribute attribute)
+        public PropertyArgument(object parent, PropertyInfo propertyInfo, ArgumentAttribute attribute)
         {
-            this.command = command;
+            this.parent = parent;
             this.propertyInfo = propertyInfo;
             this.attribute = attribute;
         }
@@ -32,7 +32,7 @@ namespace ECF.CommandBaseComponents
 
         public void Apply(ArgumentIterator visitor, ValueDictionary valueDictionary)
         {
-            propertyInfo.SetValue(command, Convert.ChangeType(visitor.Take(false), propertyInfo.PropertyType));
+            propertyInfo.SetValue(parent, Convert.ChangeType(visitor.Take(false), propertyInfo.PropertyType));
         }
 
         public void AppendHelp(StringBuilder sb)
@@ -49,5 +49,9 @@ namespace ECF.CommandBaseComponents
         }
 
         public string SectionName() => "Arguments";
+
+        public int GetOrder() => attribute.Index;
+
+        public string GetSyntaxToken() => $"<{attribute.Name}>";
     }
 }

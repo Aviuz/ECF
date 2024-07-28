@@ -61,11 +61,7 @@ namespace ECF
 
         public virtual string GetHelp()
         {
-            var commandAttribute = GetType().GetCustomAttributes()
-                .Select(attr => attr as ICommandAttribute)
-                .Where(attr => attr != null)
-                .Cast<ICommandAttribute>()
-                .First();
+            ICommandAttribute commandAttribute = GetCommandAttribute();
             string usageParameters = GetSyntaxExpression();
             string description = GetDescription();
             string parametersHelp = GetParametersHelp();
@@ -130,9 +126,26 @@ namespace ECF
             return values.BoolValues[key];
         }
 
+        private ICommandAttribute GetCommandAttribute()
+        {
+            return GetType().GetCustomAttributes()
+                 .Select(attr => attr as ICommandAttribute)
+                 .Where(attr => attr != null)
+                 .Cast<ICommandAttribute>()
+                 .First();
+        }
+
         private string GetSyntaxExpression()
         {
-            return GetType().GetCustomAttribute<CmdSyntaxAttribute>()?.SyntaxExpression ?? string.Empty;
+            string? customSyntax = GetType().GetCustomAttribute<CmdSyntaxAttribute>()?.SyntaxExpression;
+            if (customSyntax != null) return customSyntax; // for developer specified syntax
+
+            var strParts = parameters
+                .OrderBy(x => x.GetOrder())
+                .Select(x => x.GetSyntaxToken())
+                .Where(x => x != null);
+
+            return string.Join(" ", strParts);
         }
 
         private string GetDescription()
