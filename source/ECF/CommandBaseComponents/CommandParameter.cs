@@ -50,10 +50,12 @@ namespace ECF.CommandBaseComponents
 
         public string? GetSyntaxToken()
         {
-            if(!string.IsNullOrEmpty(attribute.LongName)) 
-                return $"--{attribute.LongName} <value>";
-            else if(string.IsNullOrEmpty(attribute.ShortName))
-                return $"-{attribute.ShortName} <value>";
+            if (string.IsNullOrWhiteSpace(attribute.LongName) == false && string.IsNullOrWhiteSpace(attribute.ShortName) == false)
+                return $"[-{attribute.ShortName}|--{attribute.LongName} <value>]";
+            else if (string.IsNullOrWhiteSpace(attribute.LongName) == false)
+                return $"[--{attribute.LongName} <value>]";
+            else if (string.IsNullOrWhiteSpace(attribute.ShortName) == false)
+                return $"[-{attribute.ShortName} <value>]";
             else
                 return null;
         }

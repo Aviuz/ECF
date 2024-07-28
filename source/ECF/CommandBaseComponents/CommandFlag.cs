@@ -44,8 +44,16 @@ namespace ECF.CommandBaseComponents
 
         public int GetOrder() => int.MaxValue;
 
-        public string GetSyntaxToken() => !string.IsNullOrWhiteSpace(attribute.LongName) 
-            ? "--" + attribute.LongName
-            : "-" + attribute.ShortName;
+        public string? GetSyntaxToken()
+        {
+            if (string.IsNullOrWhiteSpace(attribute.LongName) == false && string.IsNullOrWhiteSpace(attribute.ShortName) == false)
+                return $"[-{attribute.ShortName}|--{attribute.LongName}]";
+            else if (string.IsNullOrWhiteSpace(attribute.LongName) == false)
+                return $"[--{attribute.LongName}]";
+            else if (string.IsNullOrWhiteSpace(attribute.ShortName) == false)
+                return $"[-{attribute.ShortName}]";
+            else
+                return null;
+        }
     }
 }
