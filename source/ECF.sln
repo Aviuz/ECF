@@ -6,7 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECF", "ECF\ECF.csproj", "{5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECF.Microsoft.DependencyInjection", "ECF.Microsoft.DependencyInjection\ECF.Microsoft.DependencyInjection.csproj", "{1B8448E5-E052-4B63-BB0A-159195AF17EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECF.Autofac", "ECF.AutoFac\ECF.Autofac.csproj", "{EDE35DB7-F464-424A-BAE2-A5CCFFFC21DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECF.Autofac", "ECF.AutoFac\ECF.AutoFac.csproj", "{EDE35DB7-F464-424A-BAE2-A5CCFFFC21DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.csproj", "{6C7827B4-75E2-4594-8A4F-6E22E35914DE}"
 EndProject
