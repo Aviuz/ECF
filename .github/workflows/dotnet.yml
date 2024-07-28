@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore .\source
+      run: dotnet restore .\source\ECF.sln
     - name: Build
-      run: dotnet build .\source --no-restore
+      run: dotnet build .\source\ECF.sln --no-restore
     - name: Test
-      run: dotnet test .\source --no-build --verbosity normal
+      run: dotnet test .\source\ECF.sln --no-build --verbosity normal
