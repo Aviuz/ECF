@@ -1,42 +1,54 @@
-﻿using System.Reflection;
+﻿using ECF.Engine.Exceptions;
 
-namespace ECF.Engine
+namespace ECF.Engine;
+
+/// <summary>
+/// This class is responsible for mapping command names to actual command types.
+/// 
+/// 
+/// A string-type dictionary wrapper for mapping command name to actual command type.
+/// 
+/// </summary>
+public class CommandCollection
 {
-    /// <summary>
-    /// Static reflection repository for command types and their command strings
-    /// </summary>
-    public class CommandCollection
+    private Dictionary<string, Type> commandBindings = new Dictionary<string, Type>();
+
+    public Type? DefaultCommand { get; private set; }
+
+    public Type? GetCommand(string? binding)
     {
-        private HashSet<Type> commandTypes = new HashSet<Type>();
-        private Dictionary<string, Type> commandBindings = new Dictionary<string, Type>();
+        binding = binding?.ToUpper();
+        if (string.IsNullOrWhiteSpace(binding) || !commandBindings.ContainsKey(binding))
+            return DefaultCommand;
 
-        public Type? GetCommand(string binding)
-        {
-            binding = binding.ToUpper();
-            if (!commandBindings.ContainsKey(binding))
-                return null;
+        return commandBindings[binding];
+    }
 
-            return commandBindings[binding];
-        }
+    public IEnumerable<Type> GetAllCommands()
+    {
+        IEnumerable<Type> commandsWithBindings = commandBindings.Values;
 
-        public IEnumerable<ICommandAttribute> GetAllCommands()
-        {
-            foreach (var commandType in commandTypes)
-            {
-                yield return (ICommandAttribute)commandType.GetCustomAttributes().Where(x => typeof(ICommandAttribute).IsAssignableFrom(x.GetType())).First();
-            }
-        }
+        if (DefaultCommand != null)
+            commandsWithBindings = commandsWithBindings.Append(DefaultCommand);
 
-        public void Register(ICommandAttribute commandAttribute, Type commandType)
-        {
-            // add command to collection
-            commandTypes.Add(commandType);
+        return commandsWithBindings.Distinct();
+    }
 
-            // add bindings
-            commandBindings[commandAttribute.Name.ToUpper()] = commandType;
-            if (commandAttribute.Aliases != null)
-                foreach (var alias in commandAttribute.Aliases)
-                    commandBindings[alias.ToUpper()] = commandType;
-        }
+    public void Register(IEnumerable<string> commandAliases, Type commandType)
+    {
+        if (commandType.IsAssignableTo(typeof(ICommand)) == false)
+            throw new MissingCommandInterfaceException(commandType);
+
+        var transformedAliases = commandAliases
+            .Where(alias => string.IsNullOrWhiteSpace(alias) == false)
+            .Select(alias => alias.ToUpper());
+
+        foreach (string alias in transformedAliases)
+            commandBindings[alias] = commandType;
+    }
+
+    public void RegisterDefaultCommand<T>() where T : ICommand
+    {
+        DefaultCommand = typeof(T);
     }
 }

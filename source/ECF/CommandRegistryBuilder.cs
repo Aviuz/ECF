@@ -7,7 +7,7 @@ namespace ECF;
 
 public class CommandRegistryBuilder
 {
-    private readonly CommandCollection collection  = new CommandCollection();
+    private readonly CommandCollection collection = new CommandCollection();
 
     public IIoCBuilderAdapter IoCBuilderAdapter { get; }
 
@@ -27,7 +27,8 @@ public class CommandRegistryBuilder
         {
             foreach (var (type, attr) in CollectCommandTypes<TCommandAttribute>(assembly))
             {
-                collection.Register(attr, type);
+                collection.Register(new string[] { attr.Name }, type);
+                collection.Register(attr.Aliases ?? new string[0], type);
                 IoCBuilderAdapter.RegisterTransient(type);
             }
         }
@@ -42,8 +43,21 @@ public class CommandRegistryBuilder
         if (attribute == null)
             throw new Exceptions.ECFException($"Type {type.FullName} doesn't have attribute named {typeof(TCommandAttribute).FullName}");
 
-        collection.Register(attribute, type);
+        collection.Register(new string[] { attribute.Name }, type);
+        collection.Register(attribute.Aliases ?? new string[0], type);
         IoCBuilderAdapter.RegisterTransient(type);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Registers a default (fallback) command. This command will be executed when no arguments are provided, or when other commands failed to match first argument.
+    /// </summary>
+    /// <typeparam name="TCommand">Type of command to be executed</typeparam>
+    public CommandRegistryBuilder RegisterDefaultCommand<TCommand>() where TCommand : ICommand
+    {
+        collection.RegisterDefaultCommand<TCommand>();
+        IoCBuilderAdapter.RegisterTransient(typeof(TCommand));
 
         return this;
     }

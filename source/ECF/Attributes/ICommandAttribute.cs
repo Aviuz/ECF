@@ -1,8 +1,7 @@
-﻿namespace ECF
+﻿namespace ECF;
+
+public interface ICommandAttribute
 {
-    public interface ICommandAttribute
-    {
-        string[]? Aliases { get; }
-        string Name { get; set; }
-    }
+    string[]? Aliases { get; }
+    string Name { get; }
 }
