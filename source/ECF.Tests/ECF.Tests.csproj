@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECF.AutoFac\ECF.Autofac.csproj" />
+    <ProjectReference Include="..\ECF.AutoFac\ECF.AutoFac.csproj" />
     <ProjectReference Include="..\ECF.Microsoft.DependencyInjection\ECF.Microsoft.DependencyInjection.csproj" />
     <ProjectReference Include="..\ECF.Templates\ECFTemplates.csproj" />
     <ProjectReference Include="..\ECF\ECF.csproj" />
