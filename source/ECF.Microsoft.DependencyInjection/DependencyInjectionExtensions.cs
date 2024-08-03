@@ -6,9 +6,11 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjectionExtensions
 {
-    public static CommandRegistryBuilder AddECFCommandRegistry(this IServiceCollection services)
+    public static IServiceCollection AddECFCommandRegistry(this IServiceCollection services, Action<CommandRegistryBuilder> configure)
     {
-        return new CommandRegistryBuilder(new MicrosoftServiceCollectionAdapter(services));
+        var builder = new CommandRegistryBuilder(new MicrosoftServiceCollectionAdapter(services));
+        configure(builder);
+        return services;
     }
 
     public static CommandProcessor BuildAndCreateECFCommandProcessor(this IServiceCollection services)

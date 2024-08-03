@@ -1,33 +1,49 @@
 ﻿using ECF;
 using ECF.Utilities;
 
-namespace Example.Commands
+namespace Example.Commands;
+
+[Command("test-progress")]
+public class TestProgressBar : CommandBase
 {
-    [Command("test-progress")]
-    [CmdFlag("write")]
-    public class TestProgressBar : CommandBase
+    [Flag("-t --tens", Description = "write every tens to console")]
+    public bool WriteEveryTens { get; set; }
+
+    public override void Execute()
     {
-        public override void Execute()
+        var progressBar = new ProgressBar();
+
+        Console.WriteLine("testing ...");
+
+        progressBar.IsLoading = true;
+
+        Task.Run(async () =>
         {
-            var progressBar = new ProgressBar();
+            await Task.Delay(300);
 
-            Console.WriteLine("testing ...");
-
-            progressBar.IsLoading = true;
-
-            for (int i = 0; i < 100; i++)
+            lock (progressBar)
             {
-                Thread.Sleep(100);
-                progressBar.Progress++;
-                if (i == 33 && IsFlagActive("write"))
-                {
-                    Console.WriteLine("It's 33");
-                }
+                const string message =
+@"This is entry is from asynchonous. 
+Remember to lock on ProgressBar object.
+This will ensure it won't interfere with prograss bar render in console.";
+
+                Console.WriteLine(message);
             }
+        });
 
-            progressBar.IsLoading = false;
-
-            Console.WriteLine("finished ...");
+        for (int i = 0; i < 100; i++)
+        {
+            Thread.Sleep(100);
+            progressBar.Progress++;
+            if (i % 10 == 0 && WriteEveryTens)
+            {
+                Console.WriteLine($"It's {i}");
+            }
         }
+
+        progressBar.IsLoading = false;
+
+        Console.WriteLine("finished ...");
     }
 }

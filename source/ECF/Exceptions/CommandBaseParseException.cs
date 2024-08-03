@@ -1,7 +1,6 @@
-﻿namespace ECF.Exceptions
+﻿namespace ECF.Exceptions;
+
+public class CommandBaseParseException : ECFException
 {
-    public class CommandBaseParseException : Exception
-    {
-        public CommandBaseParseException(string message) : base(message) { }
-    }
+    public CommandBaseParseException(string message) : base(message) { }
 }

@@ -1,5 +1,5 @@
 ﻿using ECF;
-using ECF.Commands;
+using ECF.BaseKitCommands;
 using ECF.Engine;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -34,6 +34,7 @@ public class SwitchToDirectionContextCommand : CommandBase
     {
         interfaceContext.Prefix = "$"; // we can also change prefix
         interfaceContext.CommandProcessor = CreateDirectionCommandsProcessor(interfaceContext);
+        interfaceContext.DefaultCommand = typeof(HelpCommand); // we can also set default command (keep in mind that command need to be able to be resolved by IoC)
     }
 
     public ICommandProcessor CreateDirectionCommandsProcessor(InterfaceContext interfaceContext)
@@ -42,14 +43,15 @@ public class SwitchToDirectionContextCommand : CommandBase
         var services = new ServiceCollection();
         services.AddSingleton(interfaceContext); // remember to always include interfaceContext inside IoC
 
-        services
-            .AddECFCommandRegistry() // when using alternative scope, we need to build command registry manually
-            .RegisterCommands<DirectionCommandAttribute>(Assembly.GetExecutingAssembly()) // we can register all commands with specified attribute in specified assembly
-            .RegisterCommands<CommandAttribute>(typeof(HelpCommand).Assembly) // this line will register basic commands as HelpCommand, LoadCommand etc.
-            .Register<CommandAttribute>(typeof(ExitCommand)); // alternatively you can always register commands seperatly one by one
-
-        // at the end we need to construct CommandProcesor which will process command requests
-        return services.BuildAndCreateECFCommandProcessor();
+        return services
+            // when using alternative scope, we need to build command registry manually
+            .AddECFCommandRegistry(builder => builder
+                .RegisterCommands<DirectionCommandAttribute>(Assembly.GetExecutingAssembly()) // we can register all commands with specified attribute in specified assembly
+                .RegisterCommands<CommandAttribute>(typeof(HelpCommand).Assembly) // this line will register basic commands as HelpCommand, LoadCommand etc.
+                .Register<CommandAttribute>(typeof(ExitCommand)) // alternatively you can always register commands seperatly one by one
+                .Register(typeof(ExitCommand), "exit")) // or even register without attribute (it can cause issues with help command)
+            // at the end we need to construct CommandProcesor which will process command requests
+            .BuildAndCreateECFCommandProcessor();
     }
 }
 
@@ -58,9 +60,10 @@ public class LeftCommand : ICommand
 {
     public void ApplyArguments(CommandArguments args) { }
 
-    public void Execute()
+    public Task ExecuteAsync(CancellationToken _)
     {
         Console.WriteLine("<<<<<");
+        return Task.CompletedTask;
     }
 }
 
@@ -69,8 +72,9 @@ public class RightCommand : ICommand
 {
     public void ApplyArguments(CommandArguments args) { }
 
-    public void Execute()
+    public Task ExecuteAsync(CancellationToken _)
     {
         Console.WriteLine(">>>>>>");
+        return Task.CompletedTask;
     }
 }

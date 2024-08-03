@@ -1,9 +1,7 @@
-﻿namespace ECF.Exceptions
+﻿namespace ECF.Exceptions;
+
+public class ECFException : Exception
 {
-    internal class ECFException : Exception
-    {
-        public ECFException(string message) : base(message)
-        {
-        }
-    }
+    public ECFException(string message) : base(message) { }
+    public ECFException(string message, Exception innerException) : base(message, innerException) { }
 }

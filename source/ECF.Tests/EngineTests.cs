@@ -1,7 +1,7 @@
 using Autofac;
 using ECF.Autofac.Adapters;
 using ECF.Engine;
-using ECF.Tests.ExampleCommands;
+using ECF.Tests.Mocks;
 using System.Reflection;
 
 namespace ECF.Tests;
@@ -9,7 +9,7 @@ namespace ECF.Tests;
 public class EngineTests
 {
     [Fact]
-    public void Ensure_All_Commands_Are_Returned_From_CommandNamesCollection()
+    public void ensure_all_commands_are_returned_from_ICommandCollection()
     {
         ContainerBuilder containerBuilder = new();
         AutofacContainerBuilderAdapter autofacContainerBuilderAdapter = new(containerBuilder);
@@ -19,7 +19,7 @@ public class EngineTests
         registryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetExecutingAssembly());
 
         var container = containerBuilder.Build();
-        var collection = container.Resolve<CommandCollection>();
+        var collection = container.Resolve<ICommandCollection>();
 
         Assert.Equal(typeof(CommandWithAliases), collection.GetCommand("command-with-aliases"));
         Assert.Equal(typeof(CommandWithAliases), collection.GetCommand("aliaso"));

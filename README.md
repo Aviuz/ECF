@@ -9,6 +9,8 @@ It was designed for easy building application with multiple commands and low cou
 
 Currently only works on Windows due to `shell32.dll` dependency.
 
+For some other use cases please look into [Example Project](/source/Example).
+
 # How to use
 1. Install nuget package [ECF](https://nuget.org/packages/ECF)
 2. Put in your *program.cs* this fragment:
@@ -16,7 +18,7 @@ Currently only works on Windows due to `shell32.dll` dependency.
 // Program.cs
 using ECF;
 
-new ECFHostBuilder()
+await new ECFHostBuilder()
     .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
     .AddConfiguration(optional: true) // adds appsettings.json        
     .Configure((ctx, services, _) =>
@@ -25,7 +27,7 @@ new ECFHostBuilder()
         ctx.HelpIntro = "Welcome to example program that showcases ECF framework. Enter one of command listed below";
         ctx.Prefix = ">";
     })
-    .Run(args);
+    .RunAsync(args);
 ```
 it will initialize and run your ECF console application
 
@@ -38,7 +40,7 @@ class HelloWorldCommand : CommandBase
 {
     private readonly IConfiguration configuration;
 
-    [Parameter(ShortName = "n", LongName = "name", Description = "Your name")]
+    [Parameter("--name", "-n", Description = "Your name")]
     public string Name { get; set; }
 
     public HelloWorldCommand(IConfiguration configuration)

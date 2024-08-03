@@ -1,21 +1,20 @@
 ﻿using ECF;
 using ECF.Engine;
 
-namespace Example.Commands
+namespace Example.Commands;
+
+[Command("list-test")]
+internal class TestCommand : CommandBase
 {
-    [Command("list-test")]
-    internal class TestCommand : CommandBase
+    private readonly ICommandCollection collection;
+
+    public TestCommand(ICommandCollection collection)
     {
-        private readonly CommandCollection collection;
+        this.collection = collection;
+    }
 
-        public TestCommand(CommandCollection collection)
-        {
-            this.collection = collection;
-        }
-
-        public override void Execute()
-        {
-            Console.WriteLine($"Types: {string.Join(", ", collection.GetAllCommands())}");
-        }
+    public override void Execute()
+    {
+        Console.WriteLine($"Types: {string.Join(", ", collection.GetAllCommands())}");
     }
 }

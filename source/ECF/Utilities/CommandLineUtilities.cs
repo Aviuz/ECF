@@ -9,6 +9,9 @@ internal static class CommandLineUtilities
 
     internal static string[] CommandLineToArgs(string? commandLine)
     {
+        if (string.IsNullOrWhiteSpace(commandLine))
+            return Array.Empty<string>();
+
         int argc;
         var argv = CommandLineToArgvW(commandLine, out argc);
 

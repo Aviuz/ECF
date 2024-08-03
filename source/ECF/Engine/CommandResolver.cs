@@ -1,16 +1,15 @@
-﻿using ECF.Commands;
-using ECF.Engine.Exceptions;
+﻿using ECF.Exceptions;
 using ECF.InverseOfControl;
 
 namespace ECF.Engine;
 
 /// <summary>
-/// Command factory which is based on command string passed by user.
-/// It is based on `CommandCollection` (for mapping command name to command type) and `IIoCProviderAdapte` (for constructing command using IoC).
+/// Command factory/resolver which will create command based on string passed by user.
+/// It basically connects `CommandCollection` (for mapping command name to command type) and `IIoCProviderAdapte` (for constructing command using IoC).
 /// </summary>
 public interface ICommandResolver
 {
-    ICommand CreateCommand(CommandArguments args);
+    //ICommand CreateCommand(CommandArguments args);
     ICommand? Resolve(string command);
     ICommand Resolve(Type commandType);
 }
@@ -19,24 +18,12 @@ public interface ICommandResolver
 public class CommandResolver : ICommandResolver
 {
     private readonly IIoCProviderAdapter iocProvider;
-    private readonly CommandCollection collection;
+    private readonly ICommandCollection collection;
 
-    public CommandResolver(IIoCProviderAdapter iocProvider, CommandCollection collection)
+    public CommandResolver(IIoCProviderAdapter iocProvider, ICommandCollection collection)
     {
         this.iocProvider = iocProvider;
         this.collection = collection;
-    }
-
-    public ICommand CreateCommand(CommandArguments args)
-    {
-        ICommand? command = Resolve(args.CommandName);
-
-        if (command == null)
-            command = new NotFoundCommand();
-
-        command.ApplyArguments(args);
-
-        return command;
     }
 
     public ICommand? Resolve(string command)

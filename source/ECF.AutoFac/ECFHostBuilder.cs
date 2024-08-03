@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ECF.Autofac.Adapters;
+using ECF.Engine;
 
 namespace ECF.Autofac;
 

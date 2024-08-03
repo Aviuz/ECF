@@ -11,16 +11,19 @@ public class CommandDispatcher
         this.iocProvider = iocProvider;
     }
 
-    public void ExecuteCommand<T>(params string[] commandArgs) where T : ICommand
+    public void ExecuteCommand<T>(params string[] commandArgs) where T : ICommand => ExecuteCommandAsync<T>(commandArgs).Wait();
+
+    public async Task ExecuteCommandAsync<T>(string[] commandArgs, CancellationToken cancellationToken = default) where T : ICommand
     {
         using (var nestedScope = iocProvider.BeginNestedScope())
         {
             var command = nestedScope.Resolve<T>();
             command.ApplyArguments(new CommandArguments(
-                commandName: string.Empty,
-                arguments: commandArgs
+                commandName: null,
+                arguments: commandArgs,
+                isFallbackRequested: false
             ));
-            command.Execute();
+            await command.ExecuteAsync(cancellationToken);
         }
     }
 }

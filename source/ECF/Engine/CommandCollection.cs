@@ -1,38 +1,33 @@
-﻿using ECF.Engine.Exceptions;
+﻿using ECF.Exceptions;
 
 namespace ECF.Engine;
 
 /// <summary>
 /// This class is responsible for mapping command names to actual command types.
-/// 
-/// 
-/// A string-type dictionary wrapper for mapping command name to actual command type.
-/// 
 /// </summary>
-public class CommandCollection
+public interface ICommandCollection
+{
+    IEnumerable<Type> GetAllCommands();
+    Type? GetCommand(string? binding);
+    void Register(IEnumerable<string> commandAliases, Type commandType);
+}
+
+/// <inheritdoc cref="ICommandCollection" />
+public class CommandCollection : ICommandCollection
 {
     private Dictionary<string, Type> commandBindings = new Dictionary<string, Type>();
-
-    public Type? DefaultCommand { get; private set; }
 
     public Type? GetCommand(string? binding)
     {
         binding = binding?.ToUpper();
+
         if (string.IsNullOrWhiteSpace(binding) || !commandBindings.ContainsKey(binding))
-            return DefaultCommand;
+            return null;
 
         return commandBindings[binding];
     }
 
-    public IEnumerable<Type> GetAllCommands()
-    {
-        IEnumerable<Type> commandsWithBindings = commandBindings.Values;
-
-        if (DefaultCommand != null)
-            commandsWithBindings = commandsWithBindings.Append(DefaultCommand);
-
-        return commandsWithBindings.Distinct();
-    }
+    public IEnumerable<Type> GetAllCommands() => commandBindings.Values.Distinct();
 
     public void Register(IEnumerable<string> commandAliases, Type commandType)
     {
@@ -45,10 +40,5 @@ public class CommandCollection
 
         foreach (string alias in transformedAliases)
             commandBindings[alias] = commandType;
-    }
-
-    public void RegisterDefaultCommand<T>() where T : ICommand
-    {
-        DefaultCommand = typeof(T);
     }
 }

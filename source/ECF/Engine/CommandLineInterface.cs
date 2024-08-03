@@ -1,4 +1,6 @@
-﻿namespace ECF.Engine;
+﻿using ECF.Utilities;
+
+namespace ECF.Engine;
 
 public class CommandLineInterface
 {
@@ -9,31 +11,38 @@ public class CommandLineInterface
         this.interfaceContext = interfaceContext;
     }
 
-    public void Start(string[] args)
+    public async Task StartAsync(string[] args, CancellationToken cancellationToken = default)
     {
         if (interfaceContext.CommandProcessor == null)
             throw new ArgumentException("CommandProcessor is null. Cannot run command line interface without procesor inside InterfaceContext.");
 
-        if (args.Length > 0)
+        var cancellationController = new CancellationController(cancellationToken);
+
+        if (args.Length > 0 || interfaceContext.DisablePrompting)
         {
-            interfaceContext.SilentMode = true;
-            interfaceContext.CommandProcessor.Process(args);
+            cancellationController.StartNew();
+            await interfaceContext.CommandProcessor.ProcessAsync(args, cancellationController.SingleCommand);
         }
         else
         {
             if (!string.IsNullOrWhiteSpace(interfaceContext.Intro))
                 Console.WriteLine(interfaceContext.Intro);
-            while (!interfaceContext.ForceExit)
+            while (!interfaceContext.ForceExit && !cancellationController.Root.IsCancellationRequested)
             {
-                Console.Write(interfaceContext.Prefix + " ");
-                string? input = Console.ReadLine();
+                if (interfaceContext.Prefix != null)
+                    Console.Write(interfaceContext.Prefix);
+
+                string? input = await Console.In.ReadLineAsync().WithCancellation(cancellationController.Root);
                 try
                 {
-                    interfaceContext.CommandProcessor.Process(input);
+                    cancellationController.StartNew();
+                    await interfaceContext.CommandProcessor.ProcessAsync(input, cancellationController.SingleCommand);
+                    cancellationController.Reset();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    ColorConsole.WriteLine("Exception thrown:", ConsoleColor.Red);
+                    ColorConsole.WriteLine(ex.ToString(), ConsoleColor.Red);
                 }
             }
         }

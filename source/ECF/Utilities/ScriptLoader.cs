@@ -11,7 +11,7 @@ public class ScriptLoader
         this.context = context;
     }
 
-    public void Load(TextReader textReader)
+    public async Task LoadAsync(TextReader textReader, CancellationToken cancellationToken = default)
     {
         if (context?.CommandProcessor == null)
             throw new Exception("Cannot load script if CommandProcesor isn't initialized. InterfaceContext need to have CommandScope with processor attached.");
@@ -19,7 +19,7 @@ public class ScriptLoader
         string? line;
         do
         {
-            line = textReader.ReadLine()?.Trim();
+            line = (await textReader.ReadLineAsync())?.Trim();
 
             // Empty line
             if (string.IsNullOrEmpty(line))
@@ -29,7 +29,7 @@ public class ScriptLoader
             if (line.StartsWith("//"))
                 continue;
 
-            context.CommandProcessor.Process(line);
+            await context.CommandProcessor.ProcessAsync(line, cancellationToken);
         }
         while (line != null && !context.ForceExit);
     }

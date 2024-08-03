@@ -1,21 +1,20 @@
 ﻿using ECF;
 using Microsoft.Extensions.Configuration;
 
-namespace Example.Commands
+namespace Example.Commands;
+
+[Command("read-setting")]
+internal class ReadSettingsCommand : CommandBase
 {
-    [Command("read-setting")]
-    internal class ReadSettingsCommand : CommandBase
+    private readonly IConfiguration configuration;
+
+    public ReadSettingsCommand(IConfiguration configuration)
     {
-        private readonly IConfiguration configuration;
+        this.configuration = configuration;
+    }
 
-        public ReadSettingsCommand(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
-        public override void Execute()
-        {
-            Console.WriteLine($"MySetting value is: {configuration["MySetting"]}");
-        }
+    public override void Execute()
+    {
+        Console.WriteLine($"MySetting value is: {configuration["MySetting"]}");
     }
 }
