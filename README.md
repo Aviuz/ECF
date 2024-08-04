@@ -25,7 +25,7 @@ await new ECFHostBuilder()
     {
         ctx.Intro = $"This is example console application based on ECF. Version {typeof(Program).Assembly.GetName().Version}.\nType help to list available commands";
         ctx.HelpIntro = "Welcome to example program that showcases ECF framework. Enter one of command listed below";
-        ctx.Prefix = ">";
+        ctx.Prefix = "> ";
     })
     .RunAsync(args);
 ```
@@ -40,7 +40,7 @@ class HelloWorldCommand : CommandBase
 {
     private readonly IConfiguration configuration;
 
-    [Parameter("--name", "-n", Description = "Your name")]
+    [Required, Parameter("--name", "-n", Description = "Your name")]
     public string Name { get; set; }
 
     public HelloWorldCommand(IConfiguration configuration)
@@ -51,12 +51,6 @@ class HelloWorldCommand : CommandBase
 
     public override void Execute()
     {
-        if (Name == null)
-        {
-            DisplayHelp();
-            return;
-        }
-
         Console.WriteLine($"Hello {Name}");
     }
 }
@@ -113,16 +107,16 @@ Startup code look very similar with only namespace change:
 // Program.cs
 using ECF.Autofac;
 
-new ECFHostBuilder()
+await new ECFHostBuilder()
     .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
     .AddConfiguration(optional: true) // adds appsettings.json        
     .Configure((ctx, containerBuilder, _) =>
     {
         ctx.Intro = $"This is example console application based on ECF. Version {typeof(Program).Assembly.GetName().Version}.\nType help to list available commands";
         ctx.HelpIntro = "Welcome to example program that showcases ECF framework. Enter one of command listed below";
-        ctx.Prefix = ">";
+        ctx.Prefix = "> ";
     })
-    .Run(args);
+    .RunAsync(args);
 ```
 
 # Using custom IoC

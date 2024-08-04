@@ -8,7 +8,7 @@ class HelloWorldCommand : CommandBase
 {
     private readonly IConfiguration configuration;
 
-    [Parameter(ShortName = "n", LongName = "name", Description = "Your name")]
+    [Required, Parameter("-n", "--name", Description = "Your name")]
     public string Name { get; set; }
 
     public HelloWorldCommand(IConfiguration configuration)
@@ -19,12 +19,6 @@ class HelloWorldCommand : CommandBase
 
     public override void Execute()
     {
-        if (Name == null)
-        {
-            DisplayHelp();
-            return;
-        }
-
         Console.WriteLine($"Hello {Name}");
     }
 }
