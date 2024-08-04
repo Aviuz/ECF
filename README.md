@@ -7,10 +7,6 @@ To use this with custom IoC please refer to [Using custom IoC](#using-custom-IoC
 
 It was designed for easy building application with multiple commands and low coupling.
 
-Currently only works on Windows due to `shell32.dll` dependency.
-
-For some other use cases please look into [Example Project](/source/Example).
-
 # How to use
 1. Install nuget package [ECF](https://nuget.org/packages/ECF)
 2. Put in your *program.cs* this fragment:
@@ -77,5 +73,8 @@ Then you can create new projects using
 dotnet new ecf -o MyNewProject
 ```
 
+# Examples
+For some other use cases please look into [Example Project](/source/Example).
+
 # Advanced scenarios
-For more advanced scenarios please refer to [this section](/docs/AdvancedScenarios.md)
+For more advanced scenarios please refer to [this section](/docs/AdvancedScenarios.md).
