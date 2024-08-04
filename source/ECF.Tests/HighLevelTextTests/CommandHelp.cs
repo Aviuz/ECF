@@ -25,9 +25,7 @@ public class CommandHelp
             .UseDefaultCommands()
             .RunAsync([]);
 
-        string expectedOutput = new CommandWithOneArgument().GetHelp() + "\n";
-
-        expectedOutput = expectedOutput.Replace("\r\n", "\n");
+        string expectedOutput = new CommandWithOneArgument().GetHelp().RemoveNoise() + "\n";
 
         Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
     }
@@ -44,9 +42,7 @@ public class CommandHelp
             .UseDefaultCommands()
             .RunAsync([]);
 
-        string expectedOutput = new CommandWithOneArgument().GetHelp() + "\n";
-
-        expectedOutput = expectedOutput.Replace("\r\n", "\n");
+        string expectedOutput = new CommandWithOneArgument().GetHelp().RemoveNoise() + "\n";
 
         Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
     }
@@ -78,10 +74,50 @@ public class CommandHelp
             .UseDefaultCommands()
             .RunAsync([]);
 
-        string expectedOutput = new CommandWithOneArgumentAndOverridernHelp().GetHelp() + "\n";
+        string expectedOutput = new CommandWithOneArgumentAndOverridernHelp().GetHelp().RemoveNoise() + "\n";
 
-        expectedOutput = expectedOutput.Replace("\r\n", "\n");
+        Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
+    }
 
+    [Fact]
+    public async Task help_command_without_arguments_displays_intro_text_and_all_commands()
+    {
+        consoleStreams.Reset();
+
+        consoleStreams.UserInput("help");
+        consoleStreams.UserInput("exit");
+
+        await new ECFHostBuilder()
+            .UseDefaultCommands()
+            .Configure((ctx, _, _) =>
+            {
+                ctx.HelpIntro = "6572191373281";
+            })
+            .RunAsync([]);
+
+        Assert.StartsWith("6572191373281", consoleStreams.GetConsoleOutput());
+        Assert.Contains("command-with-one-argument-with-overriden-help", consoleStreams.GetConsoleOutput());
+    }
+
+    [Fact]
+    public async Task help_command_also_displays_help_for_specified_command()
+    {
+        consoleStreams.Reset();
+
+        consoleStreams.UserInput("help command-with-one-argument-with-overriden-help");
+        consoleStreams.UserInput("exit");
+
+        await new ECFHostBuilder()
+            .UseDefaultCommands()
+            .Configure((ctx, _, _) =>
+            {
+                ctx.HelpIntro = "548487521848";
+            })
+            .RunAsync([]);
+
+        string expectedOutput = new CommandWithOneArgumentAndOverridernHelp().GetHelp().RemoveNoise() + "\n";
+
+        Assert.DoesNotContain("548487521848", consoleStreams.GetConsoleOutput());
         Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
     }
 }

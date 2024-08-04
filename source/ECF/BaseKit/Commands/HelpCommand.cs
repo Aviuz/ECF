@@ -20,53 +20,43 @@ public class HelpCommand : ICommand, IHaveHelp
         this.interfaceContext = interfaceContext;
     }
 
-    private void ApplyArguments(CommandArguments args)
-    {
-        if (args.IsFallbackRequested && string.IsNullOrWhiteSpace(args.CommandName) == false)
-            notFoundCommand = args.CommandName;
-
-        if (args.Arguments.Length > 0 && string.IsNullOrWhiteSpace(args.Arguments[0]))
-            displayHelpForCommand = args.Arguments[0];
-    }
-
     public Task ExecuteAsync(CommandArguments args, CancellationToken _)
     {
-        Execute(args);
-        return Task.CompletedTask;
-    }
-
-    public void Execute(CommandArguments args)
-    {
-        ApplyArguments(args);
-        
-        if (notFoundCommand != null)
+        if (args.IsFallbackRequested && string.IsNullOrWhiteSpace(args.CommandName) == false) // command with binding args.CommandName does not exits 
         {
             Console.WriteLine($"Command not found: {notFoundCommand}. Type 'help' to list commands.");
         }
-        else if (displayHelpForCommand == null)
+        else if (args.Arguments.Length > 0 && string.IsNullOrWhiteSpace(args.Arguments[0]) == false) // for example: help command-to-display-help
         {
-            PrintAvailableCommands();
+            PrintHelpForSpecifiedCommand(args.Arguments[0]);
         }
         else
         {
-            var command = commandResolver.Resolve(displayHelpForCommand);
-
-            if (command == null)
-            {
-                Console.WriteLine($"There is no {displayHelpForCommand} command. Type help to list commands.");
-                return;
-            }
-
-            var helpCommand = command as IHaveHelp;
-
-            if (helpCommand == null)
-            {
-                Console.WriteLine($"Command {displayHelpForCommand} is not implementing {nameof(IHaveHelp)} interface");
-                return;
-            }
-
-            Console.WriteLine(helpCommand.GetHelp());
+            PrintAvailableCommands();
         }
+
+        return Task.CompletedTask;
+    }
+
+    private void PrintHelpForSpecifiedCommand(string commandName)
+    {
+        var command = commandResolver.Resolve(commandName);
+
+        if (command == null)
+        {
+            Console.WriteLine($"There is no {commandName} command. Type help to list commands.");
+            return;
+        }
+
+        var helpCommand = command as IHaveHelp;
+
+        if (helpCommand == null)
+        {
+            Console.WriteLine($"Command {commandName} is not implementing {nameof(IHaveHelp)} interface");
+            return;
+        }
+
+        Console.WriteLine(helpCommand.GetHelp());
     }
 
     private void PrintAvailableCommands()

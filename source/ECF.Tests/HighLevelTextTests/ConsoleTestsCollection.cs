@@ -48,13 +48,7 @@ public class ConsoleSteamsFixture : IDisposable
     public string GetConsoleOutput()
     {
         OutMemoryWriter.Flush();
-        string str = Encoding.UTF8.GetString(OutMemoryStream.ToArray());
-
-        if (str.Length > 0 && str[0] == 0xFEFF)
-            str = str.Substring(1); // Remove BOM (Byte Order Mark)
-
-        return str
-            .Replace("\r\n", "\n"); // Normalize line endings (Windows to Unix)
+        return Encoding.UTF8.GetString(OutMemoryStream.ToArray()).RemoveNoise();
     }
 
     public void Dispose()
