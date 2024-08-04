@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>EasyConsoleFramework.Base</id>
-        <version>0.2.3</version>
+        <version>1.0.0</version>
         <description>Easy Console Framewok - Framework for building command based IoC console application. This package is base library without any IoC dependency.</description>
         <authors>Aviuz</authors>
         <tags>console IoC ecf</tags>

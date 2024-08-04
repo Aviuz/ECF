@@ -54,7 +54,7 @@ class HelloWorldCommand : CommandBase
 4. Run your program
 you should see welcome info
 ```
-This is example console application based on ECF. Version 0.1.0.
+This is example console application based on ECF. Version 0.0.0.
 Type help to list available commands
 ```
 5. Invoke your command in console by typing 
