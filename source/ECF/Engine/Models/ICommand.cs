@@ -2,6 +2,5 @@
 
 public interface ICommand
 {
-    void ApplyArguments(CommandArguments args);
-    Task ExecuteAsync(CancellationToken cancellationToken);
+    Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken);
 }

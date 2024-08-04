@@ -63,8 +63,7 @@ public class CommandProcessor : ICommandProcessor
                 throw new CommandNotFoundException(args ?? new string[0]);
             }
 
-            command.ApplyArguments(arguments);
-            await command.ExecuteAsync(ct);
+            await command.ExecuteAsync(arguments, ct);
         }
     }
 }

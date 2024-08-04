@@ -5,9 +5,7 @@ public class RawCommandWithoutBase : ICommand
 {
     public static string ExpectedOutput = "Custom command executed";
 
-    public void ApplyArguments(CommandArguments args) { }
-
-    public Task ExecuteAsync(CancellationToken _)
+    public Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken)
     {
         Console.WriteLine(ExpectedOutput);
         return Task.CompletedTask;

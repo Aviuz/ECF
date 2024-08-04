@@ -1,4 +1,4 @@
-﻿using ECF;
+using ECF;
 using ECF.BaseKitCommands;
 using ECF.Engine;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,9 +58,7 @@ public class SwitchToDirectionContextCommand : CommandBase
 [DirectionCommand("left")]
 public class LeftCommand : ICommand
 {
-    public void ApplyArguments(CommandArguments args) { }
-
-    public Task ExecuteAsync(CancellationToken _)
+    public Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken)
     {
         Console.WriteLine("<<<<<");
         return Task.CompletedTask;
@@ -70,9 +68,7 @@ public class LeftCommand : ICommand
 [DirectionCommand("right")]
 public class RightCommand : ICommand
 {
-    public void ApplyArguments(CommandArguments args) { }
-
-    public Task ExecuteAsync(CancellationToken _)
+    public Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken)
     {
         Console.WriteLine(">>>>>>");
         return Task.CompletedTask;

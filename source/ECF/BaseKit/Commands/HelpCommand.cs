@@ -20,7 +20,7 @@ public class HelpCommand : ICommand, IHaveHelp
         this.interfaceContext = interfaceContext;
     }
 
-    public void ApplyArguments(CommandArguments args)
+    private void ApplyArguments(CommandArguments args)
     {
         if (args.IsFallbackRequested && string.IsNullOrWhiteSpace(args.CommandName) == false)
             notFoundCommand = args.CommandName;
@@ -29,14 +29,16 @@ public class HelpCommand : ICommand, IHaveHelp
             displayHelpForCommand = args.Arguments[0];
     }
 
-    public Task ExecuteAsync(CancellationToken _)
+    public Task ExecuteAsync(CommandArguments args, CancellationToken _)
     {
-        Execute();
+        Execute(args);
         return Task.CompletedTask;
     }
 
-    public void Execute()
+    public void Execute(CommandArguments args)
     {
+        ApplyArguments(args);
+        
         if (notFoundCommand != null)
         {
             Console.WriteLine($"Command not found: {notFoundCommand}. Type 'help' to list commands.");

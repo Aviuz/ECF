@@ -43,6 +43,14 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
         }
     }
 
+    public async Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken)
+    {
+        ApplyArguments(args);
+        await ExecuteAsync(cancellationToken);
+    }
+
+    public abstract Task ExecuteAsync(CancellationToken cancellationToken);
+
     public virtual void ApplyArguments(CommandArguments args)
     {
         ArgumentIterator tokenIterator = new(args.Arguments);
@@ -71,8 +79,6 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
             }
         }
     }
-
-    public abstract Task ExecuteAsync(CancellationToken cancellationToken);
 
     public virtual string GetHelp()
     {

@@ -18,12 +18,12 @@ public class CommandDispatcher
         using (var nestedScope = iocProvider.BeginNestedScope())
         {
             var command = nestedScope.Resolve<T>();
-            command.ApplyArguments(new CommandArguments(
+            CommandArguments args = new(
                 commandName: null,
                 arguments: commandArgs,
                 isFallbackRequested: false
-            ));
-            await command.ExecuteAsync(cancellationToken);
+            );
+            await command.ExecuteAsync(args, cancellationToken);
         }
     }
 }
