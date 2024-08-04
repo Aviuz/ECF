@@ -4,14 +4,14 @@ using ECF.Utilities;
 namespace ECF.BaseKitCommands;
 
 [Command("load-script")]
-[CmdSyntax("<FilePath>")]
+[CmdSyntax("<file_path>")]
 [CmdDescription("runs script from file")]
-[CmdArgument("filepath", 0, Description = "loads script from file specified in <FilePath>")]
 public class LoadScriptCommand : AsyncCommandBase
 {
     private readonly InterfaceContext interfaceContext;
 
-    string? FilePath => GetValue("filepath");
+    [Argument(0, Name = "file_path", Description = "loads script from file specified in <file_path>")]
+    public string? FilePath { get; set; }
 
     public LoadScriptCommand(InterfaceContext interfaceContext)
     {
