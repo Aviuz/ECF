@@ -1,15 +1,18 @@
-﻿using ECF;
+﻿using ECF.Adapters;
 using ECF.Engine;
-using ECF.Adapters;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddECFCommandRegistry(this IServiceCollection services, Action<CommandRegistryBuilder> configure)
+    public static IServiceCollection AddECFCommandRegistry(this IServiceCollection services, InterfaceContext interfaceContext, Action<CommandRegistryBuilder> configure)
     {
+        services.TryAddSingleton(interfaceContext);
+
         var builder = new CommandRegistryBuilder(new MicrosoftServiceCollectionAdapter(services));
         configure(builder);
+
         return services;
     }
 

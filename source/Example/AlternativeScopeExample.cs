@@ -39,19 +39,16 @@ public class SwitchToDirectionContextCommand : CommandBase
 
     public ICommandProcessor CreateDirectionCommandsProcessor(InterfaceContext interfaceContext)
     {
-        // CommandProcessors hold IoC containers to maintain seperate collection of services
-        var services = new ServiceCollection();
-        services.AddSingleton(interfaceContext); // remember to always include interfaceContext inside IoC
+        // CommandProcessors hold IoC containers to maintain seperate collection of services        
 
-        return services
+        return new ServiceCollection()
             // when using alternative scope, we need to build command registry manually
-            .AddECFCommandRegistry(builder => builder
+            .AddECFCommandRegistry(interfaceContext, builder => builder
                 .RegisterCommands<DirectionCommandAttribute>(Assembly.GetExecutingAssembly()) // we can register all commands with specified attribute in specified assembly
                 .RegisterCommands<CommandAttribute>(typeof(HelpCommand).Assembly) // this line will register basic commands as HelpCommand, LoadCommand etc.
                 .Register<CommandAttribute>(typeof(ExitCommand)) // alternatively you can always register commands seperatly one by one
                 .Register(typeof(ExitCommand), "exit")) // or even register without attribute (it can cause issues with help command)
-            // at the end we need to construct CommandProcesor which will process command requests
-            .BuildAndCreateECFCommandProcessor();
+            .BuildAndCreateECFCommandProcessor(); // at the end we need to construct CommandProcesor which will process command requests
     }
 }
 

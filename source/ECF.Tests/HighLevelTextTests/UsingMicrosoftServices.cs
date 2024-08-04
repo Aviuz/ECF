@@ -33,8 +33,7 @@ public class UsingMicrosoftServices
         interfaceContext.DefaultCommand = typeof(BaseKitCommands.HelpCommand);
 
         interfaceContext.CommandProcessor = new ServiceCollection()
-            .AddSingleton(interfaceContext)
-            .AddECFCommandRegistry(x => x
+            .AddECFCommandRegistry(interfaceContext, x => x
                 .RegisterCommands<CommandAttribute>(typeof(BaseKitCommands.HelpCommand).Assembly)
                 .RegisterCommands<CommandAttribute>(typeof(SimpleCommand).Assembly))
             .BuildAndCreateECFCommandProcessor();
