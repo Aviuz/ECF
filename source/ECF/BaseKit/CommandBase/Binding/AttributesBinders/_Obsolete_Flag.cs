@@ -54,19 +54,17 @@ internal class CommandFlag : ICommandBaseBinder
     public void AppendHelp(StringBuilder sb)
     {
         if (!string.IsNullOrEmpty(attribute.ShortName) && !string.IsNullOrEmpty(attribute.LongName))
-            sb.Append($"\t\t--{attribute.LongName}, -{attribute.ShortName}");
+            sb.Append($"\n\t--{attribute.LongName}, -{attribute.ShortName}");
         else if (!string.IsNullOrEmpty(attribute.LongName))
-            sb.Append($"\t\t--{attribute.LongName}");
+            sb.Append($"\n\t--{attribute.LongName}");
         else if (!string.IsNullOrEmpty(attribute.ShortName))
-            sb.Append($"\t\t-{attribute.ShortName}");
+            sb.Append($"\n\t-{attribute.ShortName}");
 
         if (!string.IsNullOrWhiteSpace(attribute.Description))
             sb.Append($"\t {attribute.Description}");
-
-        sb.AppendLine();
     }
 
-    public string SectionName() => "Flags";
+    public string SectionName() => "flags";
 
     public int GetSyntaxOrder() => int.MaxValue;
 

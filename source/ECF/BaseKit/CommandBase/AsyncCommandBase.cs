@@ -123,19 +123,26 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
 
         var sb = new StringBuilder();
 
-        sb.AppendLine($"{commandAttribute.Name} Command:");
+        IEnumerable<string> names = new string[] { commandAttribute.Name }.Union(commandAttribute.Aliases ?? Array.Empty<string>());
+        sb.Append($"{string.Join(", ", names)}");
 
-        if (commandAttribute.Aliases?.Length > 0)
-            sb.AppendLine($"\tAliases: {string.Join(", ", commandAttribute.Aliases)}");
+        if (!string.IsNullOrWhiteSpace(usageParameters))
+        {
+            sb.AppendLine();
+            sb.Append($"  usage: {commandAttribute.Name} {usageParameters}");
+        }
 
-        if (!string.IsNullOrEmpty(usageParameters))
-            sb.AppendLine($"\tUsage: {commandAttribute.Name} {usageParameters}");
+        if (!string.IsNullOrWhiteSpace(description))
+        {
+            sb.AppendLine();
+            sb.Append($"  description: {description}");
+        }
 
-        if (!string.IsNullOrEmpty(description))
-            sb.AppendLine($"\tDescription: {description}");
-
-        if (!string.IsNullOrEmpty(parametersHelp))
-            sb.AppendLine(parametersHelp);
+        if (!string.IsNullOrWhiteSpace(parametersHelp))
+        {
+            sb.AppendLine();
+            sb.Append(parametersHelp);
+        }
 
         return sb.ToString();
     }
@@ -214,7 +221,7 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
 
         foreach (var group in parameterBinders.Where(x => x.SectionName() != null).GroupBy(x => x.SectionName()))
         {
-            sb.AppendLine($"\t{group.Key}:");
+            sb.Append($"  {group.Key}:");
             foreach (var param in group)
             {
                 param.AppendHelp(sb);

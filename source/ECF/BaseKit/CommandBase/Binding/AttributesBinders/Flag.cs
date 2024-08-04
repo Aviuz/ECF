@@ -79,9 +79,9 @@ internal class PropertyFlagBinder : ICommandBaseBinder
     }
 
     public void AppendHelp(StringBuilder sb) =>
-        sb.AppendLine($"\t\t{string.Join(", ", GetFixedNames())}\t {attribute.Description}");
+        sb.Append($"\n\t{string.Join(", ", GetFixedNames())}\t {attribute.Description}");
 
-    public string SectionName() => "Flags";
+    public string SectionName() => "flags";
 
     public int GetSyntaxOrder() => int.MaxValue;
 

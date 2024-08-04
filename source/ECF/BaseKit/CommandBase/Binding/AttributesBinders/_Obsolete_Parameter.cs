@@ -60,19 +60,17 @@ internal class CommandParameter : ICommandBaseBinder
     public void AppendHelp(StringBuilder sb)
     {
         if (!string.IsNullOrEmpty(attribute.ShortName) && !string.IsNullOrEmpty(attribute.LongName))
-            sb.Append($"\t\t--{attribute.LongName} <value>, -{attribute.ShortName} <value>");
+            sb.Append($"\n\t--{attribute.LongName} <value>, -{attribute.ShortName} <value>");
         else if (!string.IsNullOrEmpty(attribute.LongName))
-            sb.Append($"\t\t--{attribute.LongName} <value>");
+            sb.Append($"\n\t--{attribute.LongName} <value>");
         else if (!string.IsNullOrEmpty(attribute.ShortName))
-            sb.Append($"\t\t-{attribute.ShortName} <value>");
+            sb.Append($"\n\t-{attribute.ShortName} <value>");
 
         if (!string.IsNullOrWhiteSpace(attribute.Description))
             sb.Append($"\t {attribute.Description}");
-
-        sb.AppendLine();
     }
 
-    public string SectionName() => "Parameters";
+    public string SectionName() => "parameters";
 
     public int GetSyntaxOrder() => int.MaxValue - 1;
 

@@ -89,17 +89,15 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
     public void AppendHelp(StringBuilder sb)
     {
         if (!string.IsNullOrWhiteSpace(attribute.Name))
-            sb.Append($"\t\t{attribute.Index}: <{attribute.Name}>");
+            sb.Append($"\n\t{attribute.Index}: <{attribute.Name}>");
         else
-            sb.Append($"\t\t{attribute.Index}: <value>");
+            sb.Append($"\n\t{attribute.Index}: <value>");
 
         if (!string.IsNullOrWhiteSpace(attribute.Description))
             sb.Append($"\t {attribute.Description}");
-
-        sb.AppendLine();
     }
 
-    public string SectionName() => "Arguments";
+    public string SectionName() => "arguments";
 
     public int GetSyntaxOrder() => attribute.Index;
 
