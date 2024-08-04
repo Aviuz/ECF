@@ -1,6 +1,6 @@
 ﻿using ECF.Engine;
 using ECF.Tests.HighLevelTextTests.HighLevelTextTests;
-using ECF.Tests.Mocks;
+using ECF.Tests.Mocks.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ECF.Tests.HighLevelTextTests;

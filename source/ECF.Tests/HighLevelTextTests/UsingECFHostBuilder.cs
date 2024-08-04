@@ -1,6 +1,6 @@
 ﻿using ECF.Exceptions;
 using ECF.Tests.HighLevelTextTests.HighLevelTextTests;
-using ECF.Tests.Mocks;
+using ECF.Tests.Mocks.Commands;
 using System.Text;
 
 namespace ECF.Tests.HighLevelTextTests;

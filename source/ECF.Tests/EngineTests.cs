@@ -1,7 +1,7 @@
 using Autofac;
 using ECF.Autofac.Adapters;
 using ECF.Engine;
-using ECF.Tests.Mocks;
+using ECF.Tests.Mocks.Commands;
 using System.Reflection;
 
 namespace ECF.Tests;
