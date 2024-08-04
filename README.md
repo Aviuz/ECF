@@ -49,23 +49,23 @@ class HelloWorldCommand : CommandBase
 ```
 4. Run your program
 you should see welcome info
-```
+```shell
 This is example console application based on ECF. Version 0.0.0.
 Type help to list available commands
 ```
 5. Invoke your command in console by typing 
-```
+```shell
 > hello-world -n John
 ```
 
 # Template
 You can use ECF template to create new projects. Firstly you need to install template:
-```
+```shell
 dotnet new install ECFTemplates
 ```
 
 Then you can create new projects using 
-```
+```shell
 dotnet new ecf -o MyNewProject
 ```
 
