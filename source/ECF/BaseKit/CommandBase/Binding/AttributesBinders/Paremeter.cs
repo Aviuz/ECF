@@ -52,12 +52,17 @@ internal class PropertyParameterBinder : ICommandBaseBinder
     private readonly object parent;
     private readonly PropertyInfo propertyInfo;
     private readonly ParameterAttribute attribute;
+    private readonly RequiredAttribute? requiredAttr;
+
+    private bool hasBeenSet = false;
 
     public PropertyParameterBinder(object parent, PropertyInfo propertyInfo, ParameterAttribute attribute)
     {
         this.parent = parent;
         this.propertyInfo = propertyInfo;
         this.attribute = attribute;
+
+        requiredAttr = propertyInfo.GetCustomAttribute<RequiredAttribute>();
     }
 
     public MatchingOrder GetMatchOrder() => MatchingOrder.FlagsAndParameters;
@@ -96,6 +101,7 @@ internal class PropertyParameterBinder : ICommandBaseBinder
         try
         {
             propertyInfo.SetValue(parent, Convert.ChangeType(value, propertyInfo.PropertyType));
+            hasBeenSet = true;
         }
         catch (FormatException)
         {
@@ -112,8 +118,9 @@ internal class PropertyParameterBinder : ICommandBaseBinder
 
     public int GetSyntaxOrder() => int.MaxValue - 1;
 
-    public string? GetSyntaxToken() =>
-        $"[{string.Join('|', GetFixedNames())} <value>]";
+    public string? GetSyntaxToken() => requiredAttr != null
+        ? $"{string.Join('|', GetFixedNames())} <value>"
+        : $"[{string.Join('|', GetFixedNames())} <value>]";
 
 #pragma warning disable CS0618 // Type or member is obsolete, Reason: backward compatibility
     private IEnumerable<string> GetFixedNames()
@@ -129,7 +136,7 @@ internal class PropertyParameterBinder : ICommandBaseBinder
 #pragma warning restore CS0618 // Type or member is obsolete
 
 #pragma warning disable CS0618 // Type or member is obsolete, Reason: backward compatibility
-    public void Validate()
+    public void ThrowIfDefinitionContainsErrors()
     {
         bool shouldThrow =
              string.IsNullOrWhiteSpace(attribute.ShortName)
@@ -142,4 +149,19 @@ internal class PropertyParameterBinder : ICommandBaseBinder
             throw new CommandBaseParseException($"Flag {parent.GetType().FullName}.{propertyInfo.Name} has no names defined.");
     }
 #pragma warning restore CS0618 // Type or member is obsolete
+
+    public bool ValidateAfterBinding(IList<string> errorMessages)
+    {
+        if (requiredAttr != null && hasBeenSet == false)
+        {
+            if (requiredAttr.ErrorMessage != null)
+                errorMessages.Add(requiredAttr.ErrorMessage);
+            else
+                errorMessages.Add($"Parameter {attribute.Names[0]} is required");
+
+            return false;
+        }
+
+        return true;
+    }
 }

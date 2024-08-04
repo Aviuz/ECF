@@ -82,5 +82,7 @@ internal class CommandFlag : ICommandBaseBinder
             return null;
     }
 
-    public void Validate() { }
+    public void ThrowIfDefinitionContainsErrors() { }
+
+    public bool ValidateAfterBinding(IList<string> errorMessages) => true;
 }

@@ -46,12 +46,17 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
     private readonly object parent;
     private readonly PropertyInfo propertyInfo;
     private readonly ArgumentAttribute attribute;
+    private readonly RequiredAttribute? requiredAttr;
+
+    private bool hasBeenSet = false;
 
     public PropertyArgumentBinder(object parent, PropertyInfo propertyInfo, ArgumentAttribute attribute)
     {
         this.parent = parent;
         this.propertyInfo = propertyInfo;
         this.attribute = attribute;
+
+        requiredAttr = propertyInfo.GetCustomAttribute<RequiredAttribute>();
     }
 
     public MatchingOrder GetMatchOrder() => MatchingOrder.Arguments;
@@ -76,6 +81,7 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
     public void Apply(ArgumentIterator visitor, ValueDictionary valueDictionary)
     {
         propertyInfo.SetValue(parent, Convert.ChangeType(visitor.Get(), propertyInfo.PropertyType));
+        hasBeenSet = true;
         visitor.AdvanceWithArgument();
     }
 
@@ -96,11 +102,38 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
 
     public int GetSyntaxOrder() => attribute.Index;
 
-    public string GetSyntaxToken() => $"<{attribute.Name}>";
+    public string GetSyntaxToken()
+    {
+        string token = string.IsNullOrEmpty(attribute.Name) == false
+            ? $"<{attribute.Name}>"
+            : $"<{attribute.Index}>";
 
-    public void Validate()
+        if (requiredAttr == null)
+            token = $"[{token}]";
+
+        return token;
+    }
+
+    public void ThrowIfDefinitionContainsErrors()
     {
         if (attribute.Index < 0)
             throw new CommandBaseParseException($"Argument {parent.GetType().FullName}.{propertyInfo.Name} has got negative index. Use 0-based index instead (0,1,2,3..)");
+    }
+
+    public bool ValidateAfterBinding(IList<string> errorMessages)
+    {
+        if (requiredAttr != null && hasBeenSet == false)
+        {
+            if (requiredAttr.ErrorMessage != null)
+                errorMessages.Add(requiredAttr.ErrorMessage);
+            else if (string.IsNullOrWhiteSpace(attribute.Name) == false)
+                errorMessages.Add($"Argument <{attribute.Name}> is required");
+            else
+                errorMessages.Add($"Argument <{attribute.Index}> is required");
+
+            return false;
+        }
+
+        return true;
     }
 }

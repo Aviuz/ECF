@@ -16,5 +16,6 @@ internal interface ICommandBaseBinder
     string? GetSyntaxToken();
 
     // other
-    void Validate();
+    void ThrowIfDefinitionContainsErrors();
+    bool ValidateAfterBinding(IList<string> errorMessages);
 }

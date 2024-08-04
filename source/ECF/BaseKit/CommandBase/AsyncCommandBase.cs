@@ -1,6 +1,6 @@
 ﻿using ECF.BaseKit.CommandBase.Binding;
+using ECF.Utilities;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Text;
 
 namespace ECF;
@@ -39,19 +39,33 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
 
         foreach (var parameter in parameterBinders)
         {
-            parameter.Validate(); // this will throw if command have some critical issues
+            parameter.ThrowIfDefinitionContainsErrors();
         }
     }
 
     public async Task ExecuteAsync(CommandArguments args, CancellationToken cancellationToken)
     {
         ApplyArguments(args);
-        await ExecuteAsync(cancellationToken);
+
+        if (Validate(out var errorMessages) == false)
+        {
+            foreach (var message in errorMessages)
+            {
+                ColorConsole.WriteLine(message, ConsoleColor.Yellow);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine($"CommandSyntax: {GetSyntaxExpression()}");
+        }
+        else
+        {
+            await ExecuteAsync(cancellationToken);
+        }
     }
 
     public abstract Task ExecuteAsync(CancellationToken cancellationToken);
 
-    public virtual void ApplyArguments(CommandArguments args)
+    protected virtual void ApplyArguments(CommandArguments args)
     {
         ArgumentIterator tokenIterator = new(args.Arguments);
         ICommandBaseBinder[] binders = parameterBinders
@@ -78,6 +92,17 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
                 tokenIterator.Advance();
             }
         }
+    }
+
+    protected virtual bool Validate(out IList<string> errorMessages)
+    {
+        bool isValid = true;
+        errorMessages = new List<string>();
+
+        foreach (var parameter in parameterBinders)
+            isValid &= parameter.ValidateAfterBinding(errorMessages);
+
+        return isValid;
     }
 
     public virtual string GetHelp()

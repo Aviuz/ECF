@@ -88,5 +88,7 @@ internal class CommandParameter : ICommandBaseBinder
             return null;
     }
 
-    public void Validate() { }
+    public void ThrowIfDefinitionContainsErrors() { }
+
+    public bool ValidateAfterBinding(IList<string> errorMessages) => true;
 }

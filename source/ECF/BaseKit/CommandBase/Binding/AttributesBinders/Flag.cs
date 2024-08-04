@@ -101,7 +101,7 @@ internal class PropertyFlagBinder : ICommandBaseBinder
 #pragma warning restore CS0618 // Type or member is obsolete
 
 #pragma warning disable CS0618 // Type or member is obsolete, Reason: backward compatibility
-    public void Validate()
+    public void ThrowIfDefinitionContainsErrors()
     {
         bool shouldThrow =
              string.IsNullOrWhiteSpace(attribute.ShortName)
@@ -113,4 +113,6 @@ internal class PropertyFlagBinder : ICommandBaseBinder
             throw new CommandBaseParseException($"Flag {parent.GetType().FullName}.{propertyInfo.Name} has no names defined.");
     }
 #pragma warning restore CS0618 // Type or member is obsolete
+
+    public bool ValidateAfterBinding(IList<string> errorMessages) => true;
 }

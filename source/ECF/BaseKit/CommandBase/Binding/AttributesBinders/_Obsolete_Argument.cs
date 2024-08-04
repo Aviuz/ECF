@@ -89,5 +89,7 @@ internal class CommandArgument : ICommandBaseBinder
 
     public string GetSyntaxToken() => $"<{attribute.Name}>";
 
-    public void Validate() { }
+    public void ThrowIfDefinitionContainsErrors() { }
+
+    public bool ValidateAfterBinding(IList<string> errorMessages) => true;
 }
