@@ -1,9 +1,9 @@
-﻿using ECF.Engine;
+using ECF.Engine;
 using System.Reflection;
 
 namespace ECF.BaseKitCommands;
 
-[Command("help")]
+[Command("help", "--help", "-h")]
 public class HelpCommand : ICommand, IHaveHelp
 {
     private string? displayHelpForCommand;

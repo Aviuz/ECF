@@ -7,4 +7,5 @@ internal enum MatchingOrder
     FlagsAndParameters_Obsolete = 2,
     Arguments = 3,
     Arguments_Obsolete = 4,
+    BaseKitBinders = 5, // only --help for now (if overriden by custom flag it will be ignored)
 }

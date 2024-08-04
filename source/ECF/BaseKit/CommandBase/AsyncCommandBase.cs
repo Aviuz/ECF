@@ -1,4 +1,5 @@
 ﻿using ECF.BaseKit.CommandBase.Binding;
+using ECF.BaseKit.CommandBase.Binding.AttributesBinders;
 using ECF.Utilities;
 using System.Reflection;
 using System.Text;
@@ -9,6 +10,8 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
 {
     private List<ICommandBaseBinder> parameterBinders = new();
     private ValueDictionary values = new();
+
+    private HelpBinder helpBinder = new();
 
     public AsyncCommandBase()
     {
@@ -37,6 +40,8 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
                 parameterBinders.Add(new PropertyFlagBinder(this, prop, flagAttr));
         }
 
+        parameterBinders.Add(helpBinder);
+
         foreach (var parameter in parameterBinders)
         {
             parameter.ThrowIfDefinitionContainsErrors();
@@ -47,7 +52,11 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
     {
         ApplyArguments(args);
 
-        if (Validate(out var errorMessages) == false)
+        if (helpBinder.WasTriggered)
+        {
+            DisplayHelp();
+        }
+        else if (Validate(out var errorMessages) == false)
         {
             foreach (var message in errorMessages)
             {
@@ -203,7 +212,7 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
     {
         StringBuilder sb = new StringBuilder();
 
-        foreach (var group in parameterBinders.GroupBy(x => x.SectionName()))
+        foreach (var group in parameterBinders.Where(x => x.SectionName() != null).GroupBy(x => x.SectionName()))
         {
             sb.AppendLine($"\t{group.Key}:");
             foreach (var param in group)

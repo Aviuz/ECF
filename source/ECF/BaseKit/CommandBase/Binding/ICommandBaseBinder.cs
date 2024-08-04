@@ -11,7 +11,7 @@ internal interface ICommandBaseBinder
 
     // help generation
     void AppendHelp(StringBuilder sb);
-    string SectionName();
+    string? SectionName();
     int GetSyntaxOrder();
     string? GetSyntaxToken();
 
