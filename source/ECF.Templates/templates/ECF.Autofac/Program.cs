@@ -1,6 +1,6 @@
 ﻿using ECF.Autofac;
 
-new ECFHostBuilder()
+await new ECFHostBuilder()
     .UseDefaultCommands() // register all commands with CommandAttribute, and default commands (help, exit, ...)
     .AddConfiguration(optional: true) // adds appsettings.json  
     .Configure((ctx, services, _) =>
@@ -9,4 +9,4 @@ new ECFHostBuilder()
         ctx.HelpIntro = "Welcome to example program that showcases ECF framework. Enter one of command listed below";
         ctx.Prefix = ">";
     })
-    .Run(args);
+    .RunAsync(args);
