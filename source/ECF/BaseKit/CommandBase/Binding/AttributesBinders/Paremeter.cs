@@ -1,5 +1,6 @@
 ﻿using ECF.BaseKit.CommandBase.Binding;
 using ECF.Exceptions;
+using ECF.Utilities;
 using System.Reflection;
 using System.Text;
 
@@ -100,7 +101,7 @@ internal class PropertyParameterBinder : ICommandBaseBinder
         string? value = visitor.Get();
         try
         {
-            propertyInfo.SetValue(parent, Convert.ChangeType(value, propertyInfo.PropertyType));
+            propertyInfo.SetValue(parent, ExConverter.ChangeType(value, propertyInfo.PropertyType));
             hasBeenSet = true;
         }
         catch (FormatException)

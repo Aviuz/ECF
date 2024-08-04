@@ -1,5 +1,6 @@
 ﻿using ECF.BaseKit.CommandBase.Binding;
 using ECF.Exceptions;
+using ECF.Utilities;
 using System.Reflection;
 using System.Text;
 
@@ -80,7 +81,7 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
 
     public void Apply(ArgumentIterator visitor, ValueDictionary valueDictionary)
     {
-        propertyInfo.SetValue(parent, Convert.ChangeType(visitor.Get(), propertyInfo.PropertyType));
+        propertyInfo.SetValue(parent, ExConverter.ChangeType(visitor.Get(), propertyInfo.PropertyType));
         hasBeenSet = true;
         visitor.AdvanceWithArgument();
     }
