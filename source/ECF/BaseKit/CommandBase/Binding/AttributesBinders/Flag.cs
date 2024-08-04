@@ -15,8 +15,20 @@ namespace ECF;
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 public class FlagAttribute : Attribute
 {
+    /// <summary>
+    /// Array of names that will be used to match flag. It is case sensitive (unless set differently). For example ["-f", "--myFlag"].
+    /// </summary>
     public string[] Names { get; set; }
+
+    /// <summary>
+    /// Description shown in help for this command.
+    /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// String comaprison mode for matching names. Default is InvariantCulture.
+    /// </summary>
+    public StringComparison ComparisonMode { get; set; } = StringComparison.InvariantCulture;
 
     [Obsolete("For same behaviour use Names (or names in constructor) instead with '-' prefix.")]
     public string? ShortName { get; set; }
@@ -47,10 +59,10 @@ internal class PropertyFlagBinder : ICommandBaseBinder
 
     public bool TryMatch(ArgumentIterator visitor)
     {
-        string? token = visitor.Get();
+        string token = visitor.Get()!; // non-nullability is ensured by caller
 
         foreach (var name in GetFixedNames())
-            if (token == name)
+            if (token.Equals(name, attribute.ComparisonMode))
                 return true;
 
         return false;

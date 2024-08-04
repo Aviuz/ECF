@@ -15,8 +15,25 @@ namespace ECF;
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 public class ParameterAttribute : Attribute
 {
+    /// <summary>
+    /// Array of names that will be used to match parameter. It is case sensitive. For example ["-p", "--myParam"].
+    /// </summary>
     public string[] Names { get; set; }
+
+    /// <summary>
+    /// Description shown in help for this command.
+    /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// String comaprison mode for matching names. Default is InvariantCulture.
+    /// </summary>
+    public StringComparison ComparisonMode { get; set; } = StringComparison.InvariantCulture;
+
+    /// <summary>
+    /// If set it will ignore value token (second one) if it starts with any of the prefixes, and eventually, it won't bind. It defaults to ["-"].
+    /// </summary>
+    public string[]? ForbiddenValuePrefixes { get; set; } = new string[] { "-" };
 
     [Obsolete("For same behaviour use Names (or names in constructor) instead with '-' prefix.")]
     public string? ShortName { get; set; }
@@ -45,17 +62,28 @@ internal class PropertyParameterBinder : ICommandBaseBinder
 
     public MatchingOrder GetMatchOrder() => MatchingOrder.FlagsAndParameters;
 
-    public bool TryMatch(ArgumentIterator visitor)
+    public bool TryMatch(ArgumentIterator visitor) =>
+        MatchFirstToken(visitor.Get()!) && MatchSecondToken(visitor.Get(1));
+
+    private bool MatchFirstToken(string token)
     {
-        Validate();
-
-        string? token = visitor.Get();
-
         foreach (var name in GetFixedNames())
-            if (token == name)
+            if (token.Equals(name, attribute.ComparisonMode))
                 return true;
 
         return false;
+    }
+
+    private bool MatchSecondToken(string? token)
+    {
+        if (token == null) return false;
+
+        if (attribute.ForbiddenValuePrefixes != null)
+            foreach (var prefix in attribute.ForbiddenValuePrefixes)
+                if (token.StartsWith(prefix))
+                    return false;
+
+        return true;
     }
 
     public void Apply(ArgumentIterator visitor, ValueDictionary valueDictionary)

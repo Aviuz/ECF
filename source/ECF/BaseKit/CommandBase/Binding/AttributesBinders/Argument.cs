@@ -1,4 +1,5 @@
 ﻿using ECF.BaseKit.CommandBase.Binding;
+using ECF.Exceptions;
 using System.Reflection;
 using System.Text;
 
@@ -14,9 +15,24 @@ namespace ECF;
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
 public class ArgumentAttribute : Attribute
 {
+    /// <summary>
+    /// 0-based index of argument in command line. It will be used to bind value in specific order.
+    /// </summary>
     public int Index { get; set; }
+
+    /// <summary>
+    /// Name that will be displayed in syntax help.
+    /// </summary>
     public string? Name { get; set; }
+
+    /// <summary>
+    /// Description shown in help for this command.
+    /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// If set it will ignore arguments that start with any of the prefixes. It defaults to ["-"]
+    /// </summary>
     public string[]? IgnorePrefixes { get; set; } = new string[] { "-" };
 
     public ArgumentAttribute(int index)
@@ -82,5 +98,9 @@ internal class PropertyArgumentBinder : ICommandBaseBinder
 
     public string GetSyntaxToken() => $"<{attribute.Name}>";
 
-    public void Validate() { }
+    public void Validate()
+    {
+        if (attribute.Index < 0)
+            throw new CommandBaseParseException($"Argument {parent.GetType().FullName}.{propertyInfo.Name} has got negative index. Use 0-based index instead (0,1,2,3..)");
+    }
 }

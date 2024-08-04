@@ -15,9 +15,16 @@ namespace ECF;
 public class CmdArgumentAttribute : Attribute
 {
     public string Key { get; set; }
+
     public int Index { get; set; }
+
     public string? Name { get; set; }
+
     public string? Description { get; set; }
+
+    /// <summary>
+    /// If set it will ignore arguments that start with any of the prefixes. It defaults to ["-"]
+    /// </summary>
     public string[]? IgnorePrefixes { get; set; } = new string[] { "-" };
 
     public CmdArgumentAttribute(string key, int index)
