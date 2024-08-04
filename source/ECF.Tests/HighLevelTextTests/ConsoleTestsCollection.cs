@@ -26,9 +26,11 @@ public class ConsoleSteamsFixture : IDisposable
 
     public void Reset()
     {
+        OutMemoryWriter.Flush();
+
         InMemoryStream.SetLength(0);
         OutMemoryStream.SetLength(0);
-        InMemoryStream.Reset();
+        InMemoryStream.ResetSemaphore();
     }
 
     public InputSteamMock InMemoryStream { get; }
@@ -92,7 +94,7 @@ public class InputSteamMock : MemoryStream
         semaphore.Release(1);
     }
 
-    public void Reset()
+    public void ResetSemaphore()
     {
         semaphore = new(0, 100);
     }

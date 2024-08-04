@@ -87,7 +87,7 @@ internal class CommandArgument : ICommandBaseBinder
 
     public int GetSyntaxOrder() => attribute.Index;
 
-    public string GetSyntaxToken() => $"<{attribute.Name}>";
+    public string GetSyntaxToken() => $"<{attribute.Name ?? attribute.Key}>";
 
     public void ThrowIfDefinitionContainsErrors() { }
 

@@ -3,7 +3,7 @@
 #pragma warning disable CS0618 // Type or member is obsolete, Reason: we're checking backward compatibility
 [Command("binding-command", "bc")]
 [CmdArgument("cmdArg-3", 2)]
-[CmdArgument("cmdArg-1", 0)]
+[CmdArgument("cmdArg-1", 0, Name= "Argument1")]
 [CmdArgument("cmdArg-2", 1, IgnorePrefixes = null)]
 [CmdFlag("flag-1", ShortName = "cf1", LongName = "cmd-flag-1")]
 [CmdFlag("flag-2", ShortName = "cf2", LongName = "cmd-flag-2")]
