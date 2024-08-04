@@ -1,4 +1,4 @@
-# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg?label=ECF)](https://nuget.org/packages/ECF) [![NuGet](https://img.shields.io/nuget/v/ECFTemplates.svg?label=ECFTemplates)](https://nuget.org/packages/ECFTemplates)
+# Easy Console Framework [![NuGet](https://img.shields.io/nuget/v/ECF.svg?label=ECF&logo=nuget)](https://nuget.org/packages/ECF) [![NuGet](https://img.shields.io/nuget/v/ECFTemplates.svg?label=ECFTemplates&logo=nuget)](https://nuget.org/packages/ECFTemplates)
 .NET Core library for easy building console application with command line parsing and inversion of control (IoC).  
 By default it's using `Microsoft.Extensions.DependencyInjection` (see configuration for [AutoFac](/docs/AdvancedScenarios.md/#using-autofac), [custom](/docs/AdvancedScenarios.md/#using-custom-ioc)).  
 It was designed for easy building application with multiple commands and low coupling.
