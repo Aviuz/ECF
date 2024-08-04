@@ -22,8 +22,13 @@ public class ProgressBar
 
                 progress = value;
 
-                if (IsLoading)
+                if (isLoading == false) return; // this is to avoid unnecessary lock
+
+                lock (this)
+                {
+                    if (isLoading == false) return; // this is to be sure after lock we still want to render
                     UpdateProgress();
+                }
             }
         }
     }
@@ -33,13 +38,23 @@ public class ProgressBar
         get { return isLoading; }
         set
         {
-            if (value != isLoading)
+            lock (this)
             {
-                if (value)
-                    Enable();
-                else
-                    Disable();
-                isLoading = value;
+                if (value != isLoading)
+                {
+                    if (value == true)
+                    {
+                        Console.CursorVisible = false;
+                        UpdateProgress();
+                        isLoading = true;
+                    }
+                    else
+                    {
+                        Erase();
+                        Console.CursorVisible = true;
+                        isLoading = false;
+                    }
+                }
             }
         }
     }
@@ -87,18 +102,5 @@ public class ProgressBar
         Console.Write(new string(' ', Length + 7));
 
         Console.CursorLeft = 0;
-    }
-
-    private void Enable()
-    {
-        Console.CursorVisible = false;
-        UpdateProgress();
-    }
-
-    private void Disable()
-    {
-        Erase();
-
-        Console.CursorVisible = true;
     }
 }
