@@ -3,47 +3,59 @@ using ECF.Utilities;
 
 namespace Example.Commands;
 
-[Command("test-progress")]
-public class TestProgressBar : CommandBase
+[Command("test-progress", "progress")]
+public class TestProgressBar : AsyncCommandBase
 {
     [Flag("-t --tens", Description = "write every tens to console")]
     public bool WriteEveryTens { get; set; }
 
-    public override void Execute()
+    public override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var progressBar = new ProgressBar();
 
-        Console.WriteLine("testing ...");
+        Console.WriteLine("Let's load some very large data...");
+        progressBar.IsLoading = true; // this will display progress bar inside console window
 
-        progressBar.IsLoading = true;
-
-        Task.Run(async () =>
-        {
-            await Task.Delay(300);
-
-            lock (progressBar)
-            {
-                const string message =
-@"This is entry is from asynchonous. 
-Remember to lock on ProgressBar object.
-This will ensure it won't interfere with prograss bar render in console.";
-
-                Console.WriteLine(message);
-            }
-        });
+        var backgroundTask = BackgroundTask(progressBar, cancellationToken);
 
         for (int i = 0; i < 100; i++)
         {
-            Thread.Sleep(100);
+            await Task.Delay(100, cancellationToken);
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                progressBar.IsLoading = false;
+                ColorConsole.WriteLine("Cancelled! Interrupting loading...", ConsoleColor.Red);
+                return;
+            }
+
             progressBar.Progress++;
+
             if (i % 10 == 0 && WriteEveryTens)
             {
-                Console.WriteLine($"It's {i}");
+                progressBar.IsLoading = false;
+                Console.WriteLine($"It's {i}"); // keep in mind this can actaully print over BackgroundTask, but that's on you 😉
+                progressBar.IsLoading = true;
             }
         }
 
-        progressBar.IsLoading = false;
+        progressBar.IsLoading = false; // this will hide progress bar
 
-        Console.WriteLine("finished ...");
+        Console.WriteLine("Finished!");
+
+        await backgroundTask;
+    }
+
+    public async Task BackgroundTask(ProgressBar progressBar, CancellationToken cancellationToken)
+    {
+        await Task.Delay(300, cancellationToken);
+
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
+        progressBar.IsLoading = false; // this is thread safe operation and will enable clear console to print messages
+        ColorConsole.WriteLine("AsyncTest", ConsoleColor.Magenta); // this will print on top of progress bar if you do not disable it, you can comment line above to see the difference
+        ColorConsole.WriteLine(@"This is entry is from asynchonous background task. Progress bar should be thread safe if disabled before printing anything.", ConsoleColor.Magenta);
+        progressBar.IsLoading = true; // put this back on
     }
 }

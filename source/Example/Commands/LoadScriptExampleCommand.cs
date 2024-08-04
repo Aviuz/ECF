@@ -6,7 +6,7 @@ using Example.Properties;
 namespace Example.Commands;
 
 [Command("load-example")]
-[CmdDescription("loads example script from resources")]
+[CmdDescription("loads example script from static file")]
 public class LoadScriptExampleCommand : AsyncCommandBase
 {
     private readonly InterfaceContext interfaceContext;
