@@ -9,7 +9,7 @@ public class BackwardCompatibility
     {
         BindingCommand command = new();
 
-        var args = "first second third -f1 -f2 f3 -p1 fourth -p2 fifth p3 sixth".Split();
+        var args = "first second third -f1 -f2 f3 -p1 fourth -p2 fifth p3 sixth".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -31,7 +31,7 @@ public class BackwardCompatibility
     {
         LegacyBindingCommand command = new();
 
-        var args = "first second third -cf1 -cf2 -cf3 -cp1 fourth -cp2 fifth -cp3 sixth".Split();
+        var args = "first second third -cf1 -cf2 -cf3 -cp1 fourth -cp2 fifth -cp3 sixth".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -57,7 +57,7 @@ public class BackwardCompatibility
 
         BindingCommand command = new();
 
-        var args = "first -second third".Split();
+        var args = "first -second third".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 

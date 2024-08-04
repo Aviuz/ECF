@@ -26,7 +26,7 @@ public class RequiredPropertiesBinding
     {
         CommandsWithRequiredParams command = new();
 
-        var args = "first".Split();
+        var args = "first".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -43,7 +43,7 @@ public class RequiredPropertiesBinding
     {
         CommandsWithRequiredParams command = new();
 
-        var args = "first --required-param test".Split();
+        var args = "first --required-param test".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -57,7 +57,7 @@ public class RequiredPropertiesBinding
     {
         CommandsWithRequiredParams command = new();
 
-        var args = "first second --required-param test --non-required-param test".Split();
+        var args = "first second --required-param test --non-required-param test".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
         Assert.True(command.Validate(out var errors));

@@ -9,7 +9,7 @@ public class BaseBinding
     {
         BindingCommand command = new();
 
-        var args = "first second third fourth fifth -f1 -f2 -f3".Split();
+        var args = "first second third fourth fifth -f1 -f2 -f3".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -23,7 +23,7 @@ public class BaseBinding
     {
         BindingCommand command = new();
 
-        var args = "justtoignorefistargument -p1 -p2 test".Split();
+        var args = "justtoignorefistargument -p1 -p2 test".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 
@@ -42,10 +42,7 @@ public class BaseBinding
     {
         BindingCommand command = new();
 
-        var args =
-            !string.IsNullOrEmpty(input)
-            ? input.Split()
-            : Array.Empty<string>();
+        var args = input.Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 

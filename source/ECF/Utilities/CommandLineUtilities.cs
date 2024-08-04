@@ -1,39 +1,55 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Text;
 
 namespace ECF.Utilities;
 
-internal static class CommandLineUtilities
+public static class CommandLineTokenizer
 {
-    [DllImport("shell32.dll", SetLastError = true)]
-    private static extern IntPtr CommandLineToArgvW([MarshalAs(UnmanagedType.LPWStr)] string? lpCmdLine, out int pNumArgs);
-
-    internal static string[] CommandLineToArgs(string? commandLine)
+    public static string[] Tokenize(string? commandLine)
     {
-        if (string.IsNullOrWhiteSpace(commandLine))
+        if (commandLine == null)
             return Array.Empty<string>();
 
-        int argc;
-        var argv = CommandLineToArgvW(commandLine, out argc);
+        List<string> tokens = new List<string>();
+        StringBuilder currentToken = new StringBuilder();
+        bool inQuotes = false;
+        bool escapeNext = false;
 
-        if (argv == IntPtr.Zero)
+        for (int i = 0; i < commandLine.Length; i++)
         {
-            throw new System.ComponentModel.Win32Exception();
-        }
+            char c = commandLine[i];
 
-        try
-        {
-            var args = new string[argc];
-            for (int i = 0; i < args.Length; i++)
+            if (escapeNext)
             {
-                var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
-                args[i] = Marshal.PtrToStringUni(p)!;
+                currentToken.Append(c);
+                escapeNext = false;
             }
+            else if (c == '\\' && i + 1 < commandLine.Length && commandLine[i + 1] == '\"') // escape \"
+            {
+                escapeNext = true;
+            }
+            else if (c == '\"')
+            {
+                inQuotes = !inQuotes;
+            }
+            else if (char.IsWhiteSpace(c) && !inQuotes)
+            {
+                if (currentToken.Length > 0)
+                {
+                    tokens.Add(currentToken.ToString());
+                    currentToken.Clear();
+                }
+            }
+            else
+            {
+                currentToken.Append(c);
+            }
+        }
 
-            return args;
-        }
-        finally
+        if (currentToken.Length > 0)
         {
-            Marshal.FreeHGlobal(argv);
+            tokens.Add(currentToken.ToString());
         }
+
+        return tokens.ToArray();
     }
 }

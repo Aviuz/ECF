@@ -7,7 +7,7 @@ public class NullableBindings
     {
         NullableCommand command = new();
 
-        var args = "134 7820".Split();
+        var args = "134 \"7820\"".Tokenize();
 
         command.ApplyArguments(new CommandArguments(null, args));
 

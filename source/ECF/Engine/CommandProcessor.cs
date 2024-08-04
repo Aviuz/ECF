@@ -23,7 +23,7 @@ public class CommandProcessor : ICommandProcessor
         this.iocProvider = iocProvider;
     }
 
-    public Task ProcessAsync(string? commandLine, CancellationToken ct) => ProcessAsync(CommandLineUtilities.CommandLineToArgs(commandLine), ct);
+    public Task ProcessAsync(string? commandLine, CancellationToken ct) => ProcessAsync(CommandLineTokenizer.Tokenize(commandLine), ct);
 
     public async Task ProcessAsync(string[] args, CancellationToken ct)
     {
