@@ -1,4 +1,4 @@
-﻿using ECF.Utilities;
+using ECF.Utilities;
 
 namespace ECF.Engine;
 
@@ -28,7 +28,7 @@ internal class CancellationController
             e.Cancel = true; // Prevent the process from terminating immediately
             rootSource.Cancel();
         }
-        if (singleCommandSource != null && singleCommandSource.IsCancellationRequested == false)
+        else if (singleCommandSource != null && singleCommandSource.IsCancellationRequested == false)
         {
             e.Cancel = true; // Prevent the process from terminating immediately
             singleCommandSource.Cancel();

@@ -1,4 +1,4 @@
-﻿using ECF.Utilities;
+using ECF.Utilities;
 
 namespace ECF.Engine;
 
@@ -33,6 +33,9 @@ public class CommandLineInterface
                     Console.Write(interfaceContext.Prefix);
 
                 string? input = await Console.In.ReadLineAsync().WithCancellation(cancellationController.Root);
+                
+                if (input == null) return; // Ctrl+C was pressed
+
                 try
                 {
                     cancellationController.StartNew();
