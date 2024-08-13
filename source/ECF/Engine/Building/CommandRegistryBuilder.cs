@@ -13,6 +13,8 @@ public class CommandRegistryBuilder
 
     private IIoCBuilderAdapter IoCBuilderAdapter;
 
+    internal bool IsEmpty => collection.GetAllCommands().Any() == false;
+
     public CommandRegistryBuilder(IIoCBuilderAdapter iocBuilderAdapter)
     {
         IoCBuilderAdapter = iocBuilderAdapter;

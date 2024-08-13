@@ -1,8 +1,12 @@
-﻿using ECF;
+using ECF;
 using Microsoft.Extensions.DependencyInjection;
 
 await new ECFHostBuilder()
+#if CI_Pipeline
+    .UseSingleCommand<Example.Commands.TestProgressBar_Asynchronous>()
+#else 
     .UseDefaultCommands() // register all commands with CommandAttribute and default commands (help, exit, ...)
+#endif
     .AddConfiguration(optional: true) // adds appsettings.json        
     .Configure((ctx, services, _) =>
     {

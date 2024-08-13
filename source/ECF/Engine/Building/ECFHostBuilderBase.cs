@@ -1,4 +1,4 @@
-﻿using ECF.Exceptions;
+using ECF.Exceptions;
 using ECF.InverseOfControl;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
@@ -10,6 +10,8 @@ namespace ECF.Engine;
 /// </summary>
 public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderAdapter : class, IIoCBuilderAdapter<TDPBuilder> where TDPBuilder : class
 {
+    private bool throwWhenCommandRegistryNotEmpty = false;
+
     public InterfaceContext InterfaceContext { get; }
     public TDPBuilderAdapter IoCBuilderAdapter { get; }
     public CommandRegistryBuilder RegistryBuilder { get; }
@@ -33,6 +35,24 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
 
             if (InterfaceContext.DefaultCommand == null)
                 InterfaceContext.DefaultCommand = typeof(BaseKitCommands.HelpCommand);
+        }
+        catch (Exception ex)
+        {
+            throw new ECFInitializationException(ex);
+        }
+
+        return this;
+    }
+
+    public ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> UseSingleCommand<TCommand>() where TCommand : class, ICommand
+    {
+        try
+        {
+            IoCBuilderAdapter.RegisterScoped<TCommand>();
+            InterfaceContext.DefaultCommand = typeof(TCommand);
+            InterfaceContext.DisablePrompting = true;
+
+            throwWhenCommandRegistryNotEmpty = true;
         }
         catch (Exception ex)
         {
@@ -79,6 +99,9 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
 
     public async Task RunAsync(string[] args, CancellationToken cancellationToken = default)
     {
+        if (throwWhenCommandRegistryNotEmpty && RegistryBuilder.IsEmpty == false)
+            throw new ECFCommandRegistryNotEmptyWhenUsingSingleMode();
+
         if (InterfaceContext.CommandProcessor == null)
             InterfaceContext.CommandProcessor = new CommandProcessor(IoCBuilderAdapter.Build());
 
