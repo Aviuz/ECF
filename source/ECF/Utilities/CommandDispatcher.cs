@@ -18,12 +18,7 @@ public class CommandDispatcher
         using (var nestedScope = iocProvider.BeginNestedScope())
         {
             var command = nestedScope.Resolve<T>();
-            CommandArguments args = new(
-                commandName: null,
-                arguments: commandArgs,
-                isFallbackRequested: false
-            );
-            await command.ExecuteAsync(args, cancellationToken);
+            await command.ExecuteAsync(CommandArguments.FromCode(commandArgs), cancellationToken);
         }
     }
 }

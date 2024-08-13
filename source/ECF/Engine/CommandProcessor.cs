@@ -32,30 +32,19 @@ public class CommandProcessor : ICommandProcessor
             var resolver = scope.Resolve<ICommandResolver>();
             var context = scope.Resolve<InterfaceContext>();
 
-            ICommand? command;
-            CommandArguments arguments;
+            ICommand? command = null;
+            CommandArguments? arguments = null;
 
             if (args.Length > 0)
             {
                 command = resolver.Resolve(args[0]);
-                arguments = new CommandArguments(
-                    commandName: args[0],
-                    arguments: args.Skip(1).ToArray()
-                );
-            }
-            else
-            {
-                command = null;
-                arguments = new CommandArguments(
-                    commandName: null,
-                    arguments: args ?? new string[0]
-                );
+                arguments = CommandArguments.ForMappedCommand(args[0], args.Skip(1).ToArray());
             }
 
             if (command == null && context.DefaultCommand != null)
             {
                 command = resolver.Resolve(context.DefaultCommand);
-                arguments.IsFallbackRequested = true;
+                arguments = CommandArguments.ForDefaultCommand(args);
             }
 
             if (command == null)
@@ -63,7 +52,7 @@ public class CommandProcessor : ICommandProcessor
                 throw new CommandNotFoundException(args ?? new string[0]);
             }
 
-            await command.ExecuteAsync(arguments, ct);
+            await command.ExecuteAsync(arguments!, ct);
         }
     }
 }

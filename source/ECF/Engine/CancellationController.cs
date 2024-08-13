@@ -25,12 +25,12 @@ internal class CancellationController
     {
         if (singleCommandSource == null)
         {
-            e.Cancel = true; // Prevent the process from terminating immediately
+            e.Cancel = true; // Prevent the process from terminating
             rootSource.Cancel();
         }
         else if (singleCommandSource != null && singleCommandSource.IsCancellationRequested == false)
         {
-            e.Cancel = true; // Prevent the process from terminating immediately
+            e.Cancel = true; // Prevent the process from terminating
             singleCommandSource.Cancel();
             ColorConsole.WriteLine("Cancellation requested. Press again ctrl+c to force shutdown.", ConsoleColor.Yellow);
         }

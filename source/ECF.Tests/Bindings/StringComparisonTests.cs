@@ -11,7 +11,7 @@ public class StringComparisonTests
 
         var args = "-f1 -F2 f3 -p1 test -P2 test p3 test -cf1 -cF2 -cf3 -cp1 test -CP2 test -cp3 test".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.True(command.Flag1);
         Assert.False(command.Flag2);
@@ -37,7 +37,7 @@ public class StringComparisonTests
 
         var args = "-f1 -F2 f3 -p1 test -P2 test p3 test".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.True(command.Flag1);
         Assert.True(command.Flag2);

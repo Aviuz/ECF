@@ -22,13 +22,16 @@ public class HelpCommand : ICommand, IHaveHelp
 
     public Task ExecuteAsync(CommandArguments args, CancellationToken _)
     {
-        if (args.IsFallbackRequested && string.IsNullOrWhiteSpace(args.CommandName) == false) // command with binding args.CommandName does not exits 
-        {
-            Console.WriteLine($"Command not found: {notFoundCommand}. Type 'help' to list commands.");
-        }
-        else if (args.Arguments.Length > 0 && string.IsNullOrWhiteSpace(args.Arguments[0]) == false) // for example: help command-to-display-help
+        bool isArgumentPresent = args.Arguments.Length > 0
+            && string.IsNullOrWhiteSpace(args.Arguments[0]) == false;
+
+        if (args.ExecutedAsDefaultCommand == false && isArgumentPresent)
         {
             PrintHelpForSpecifiedCommand(args.Arguments[0]);
+        }
+        else if (isArgumentPresent)
+        {
+            Console.WriteLine($"Command not found: {notFoundCommand}. Type 'help' to list commands.");
         }
         else
         {

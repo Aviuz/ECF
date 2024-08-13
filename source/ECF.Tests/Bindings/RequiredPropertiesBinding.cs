@@ -11,7 +11,7 @@ public class RequiredPropertiesBinding
 
         var args = new string[0];
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.False(command.Validate(out var errors));
 
@@ -28,7 +28,7 @@ public class RequiredPropertiesBinding
 
         var args = "first".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.False(command.Validate(out var errors));
 
@@ -45,7 +45,7 @@ public class RequiredPropertiesBinding
 
         var args = "first --required-param test".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.True(command.Validate(out var errors));
 
@@ -59,7 +59,7 @@ public class RequiredPropertiesBinding
 
         var args = "first second --required-param test --non-required-param test".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
         Assert.True(command.Validate(out var errors));
 
         Assert.Empty(errors);

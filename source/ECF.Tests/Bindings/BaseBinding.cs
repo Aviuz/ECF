@@ -11,7 +11,7 @@ public class BaseBinding
 
         var args = "first second third fourth fifth -f1 -f2 -f3".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.Equal("first", command.Argument1);
         Assert.Equal("second", command.Argument2);
@@ -25,7 +25,7 @@ public class BaseBinding
 
         var args = "justtoignorefistargument -p1 -p2 test".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.Null(command.Parameter1);
         Assert.Equal("test", command.Parameter2);
@@ -44,7 +44,7 @@ public class BaseBinding
 
         var args = input.Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         // new bindings
         Assert.Equal(argument1, command.Argument1);

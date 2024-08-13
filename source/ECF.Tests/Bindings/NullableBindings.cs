@@ -9,7 +9,7 @@ public class NullableBindings
 
         var args = "134 \"7820\"".Tokenize();
 
-        command.ApplyArguments(new CommandArguments(null, args));
+        command.ApplyArguments(CommandArguments.FromCode(args));
 
         Assert.Equal(134, command.NonNullableProperty);
         Assert.Equal(7820, command.NullableProperty);
@@ -20,7 +20,7 @@ public class NullableBindings
     {
         NullableCommand command = new();
 
-        command.ApplyArguments(new CommandArguments(null, []));
+        command.ApplyArguments(CommandArguments.FromCode([]));
 
         Assert.Equal(0, command.NonNullableProperty);
         Assert.Null(command.NullableProperty);
