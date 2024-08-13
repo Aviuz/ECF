@@ -37,6 +37,7 @@ internal class CancellationController
         else // this is probably second time ctrl+c was pressed
         {
             rootSource.Cancel();
+            Environment.Exit(1);
         }
     }
 }
