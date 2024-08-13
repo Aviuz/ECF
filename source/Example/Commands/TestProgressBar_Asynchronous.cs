@@ -3,8 +3,8 @@ using ECF.Utilities;
 
 namespace Example.Commands;
 
-[Command("test-progress", "progress")]
-public class TestProgressBar : AsyncCommandBase
+[Command("asynchronous-test-progress", "async-progress", "test-progress", "progress")]
+public class TestProgressBar_Asynchronous : AsyncCommandBase
 {
     [Flag("-t --tens", Description = "write every tens to console")]
     public bool WriteEveryTens { get; set; }
@@ -18,25 +18,27 @@ public class TestProgressBar : AsyncCommandBase
 
         var backgroundTask = BackgroundTask(progressBar, cancellationToken);
 
-        for (int i = 0; i < 100; i++)
+        try
         {
-            await Task.Delay(100, cancellationToken);
-
-            if (cancellationToken.IsCancellationRequested)
+            for (int i = 0; i < 100; i++)
             {
-                progressBar.IsLoading = false;
-                ColorConsole.WriteLine("Cancelled! Interrupting loading...", ConsoleColor.Red);
-                return;
-            }
+                await Task.Delay(100, cancellationToken);
 
-            progressBar.Progress++;
+                progressBar.Progress++;
 
-            if (i % 10 == 0 && WriteEveryTens)
-            {
-                progressBar.IsLoading = false;
-                Console.WriteLine($"It's {i}"); // keep in mind this can actaully print over BackgroundTask, but that's on you 😉
-                progressBar.IsLoading = true;
+                if (i % 10 == 0 && WriteEveryTens)
+                {
+                    progressBar.IsLoading = false;
+                    Console.WriteLine($"It's {i}"); // keep in mind this can actaully print over BackgroundTask, but that's on you 😉
+                    progressBar.IsLoading = true;
+                }
             }
+        }
+        catch (TaskCanceledException)
+        {
+            progressBar.IsLoading = false;
+            ColorConsole.WriteLine("Cancelled! Interrupting loading...", ConsoleColor.Red);
+            return;
         }
 
         progressBar.IsLoading = false; // this will hide progress bar
