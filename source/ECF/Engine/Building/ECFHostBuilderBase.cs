@@ -31,7 +31,7 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
             RegistryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetCallingAssembly());
             RegistryBuilder.RegisterCommands<CommandAttribute>(Assembly.GetEntryAssembly()!);
 
-            if(InterfaceContext.DefaultCommand == null)
+            if (InterfaceContext.DefaultCommand == null)
                 InterfaceContext.DefaultCommand = typeof(BaseKitCommands.HelpCommand);
         }
         catch (Exception ex)
