@@ -120,4 +120,44 @@ public class CommandHelp
         Assert.DoesNotContain("548487521848", consoleStreams.GetConsoleOutput());
         Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
     }
+
+    [Fact]
+    public async Task executing_help_with_unknown_command_should_give_specified_output_format()
+    {
+        string commandNotFoundFormat = "There is no {0} command. Type help to list commands.";
+        string commandName = "this-command-does-not-exists-and-to-be-sure-lets-put-some-numbers-287361831293172391";
+
+        consoleStreams.Reset();
+
+        consoleStreams.UserInput($"help {commandName}");
+        consoleStreams.UserInput("exit");
+
+        await new ECFHostBuilder()
+            .UseDefaultCommands()
+            .RunAsync([]);
+
+        string expectedOutput = string.Format(commandNotFoundFormat, commandName).RemoveNoise() + "\n";
+
+        Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
+    }
+
+    [Fact]
+    public async Task executing_unknown_command_should_give_specified_output_format()
+    {
+        string commandNotFoundFormat = "Command not found: {0}. Type 'help' to list commands.";
+        string commandName = "this-command-does-not-exists-and-to-be-sure-lets-put-some-numbers-287361831293172391";
+
+        consoleStreams.Reset();
+
+        consoleStreams.UserInput($"{commandName}");
+        consoleStreams.UserInput("exit");
+
+        await new ECFHostBuilder()
+            .UseDefaultCommands()
+            .RunAsync([]);
+
+        string expectedOutput = string.Format(commandNotFoundFormat, commandName).RemoveNoise() + "\n";
+
+        Assert.Equal(expectedOutput, consoleStreams.GetConsoleOutput());
+    }
 }
