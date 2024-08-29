@@ -6,9 +6,6 @@ namespace ECF.BaseKitCommands;
 [Command("help", "--help", "-h")]
 public class HelpCommand : ICommand, IHaveHelp
 {
-    private string? displayHelpForCommand;
-    private string? notFoundCommand;
-
     private readonly ICommandResolver commandResolver;
     private readonly ICommandCollection commandsCollection;
     private readonly InterfaceContext interfaceContext;
@@ -31,7 +28,7 @@ public class HelpCommand : ICommand, IHaveHelp
         }
         else if (isArgumentPresent)
         {
-            Console.WriteLine($"Command not found: {notFoundCommand}. Type 'help' to list commands.");
+            Console.WriteLine($"Command not found: {args.Arguments[0]}. Type 'help' to list commands.");
         }
         else
         {
