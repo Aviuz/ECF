@@ -11,6 +11,7 @@ public class MicrosoftServiceProviderAdapter : IIoCProviderAdapter
     public MicrosoftServiceProviderAdapter(IServiceProvider serviceProvider) => this.serviceProvider = serviceProvider;
 
     public TService Resolve<TService>() where TService : notnull => serviceProvider.GetRequiredService<TService>();
+    public IEnumerable<TService> ResolveMultiple<TService>() where TService : notnull => serviceProvider.GetServices<TService>();
     public object Resolve(Type serviceType) => serviceProvider.GetRequiredService(serviceType);
     public IIoCScopeAdapter BeginNestedScope() => new MicrosoftServiceScopeAdapter(serviceProvider.CreateScope());
 }

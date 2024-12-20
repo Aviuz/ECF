@@ -21,7 +21,7 @@ public class UsingMicrosoftServices
         consoleStreams.Reset();
 
         var commandline = PrepareDefaultCommandLineUsingCustomConfiguration(ctx => ctx.HelpIntro = "5284749012");
-        await commandline.StartAsync(["help"]);
+        await commandline.RunAsync(["help"]);
 
         Assert.StartsWith("5284749012", consoleStreams.GetConsoleOutput());
     }

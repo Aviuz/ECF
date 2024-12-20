@@ -12,6 +12,11 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
 {
     private bool throwWhenCommandRegistryNotEmpty = false;
 
+    public delegate Task OnStartEventHandler(IIoCProviderAdapter services, CancellationToken cancellationToken);
+    public delegate Task OnStopEventHandler(IIoCProviderAdapter services);
+    private event OnStartEventHandler onStart;
+    private event OnStopEventHandler onStop;
+
     public InterfaceContext InterfaceContext { get; }
     public TDPBuilderAdapter IoCBuilderAdapter { get; }
     public CommandRegistryBuilder RegistryBuilder { get; }
@@ -80,6 +85,7 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile(configurationFileName, optional, reloadOnChange)
+            .AddUserSecrets(Assembly.GetEntryAssembly())
             .Build();
 
         IoCBuilderAdapter.RegisterSingleton<IConfiguration>(configuration);
@@ -95,18 +101,43 @@ public class ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> where TDPBuilderA
         return this;
     }
 
+    public ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> RegisterStartHandler(OnStartEventHandler eventHandler)
+    {
+        onStart += eventHandler;
+        return this;
+    }
+
+    public ECFHostBuilderBase<TDPBuilderAdapter, TDPBuilder> RegisterStopHandler(OnStopEventHandler eventHandler)
+    {
+        onStop += eventHandler;
+        return this;
+    }
+
     public void Run(string[] args) => RunAsync(args, default).Wait();
 
     public async Task RunAsync(string[] args, CancellationToken cancellationToken = default)
     {
+        using CancellationTokenSource customBackgroundWorkersCts = new();
+
         if (throwWhenCommandRegistryNotEmpty && RegistryBuilder.IsEmpty == false)
             throw new ECFCommandRegistryNotEmptyWhenUsingSingleMode();
 
+        IIoCProviderAdapter ioc = IoCBuilderAdapter.Build();
+
         if (InterfaceContext.CommandProcessor == null)
-            InterfaceContext.CommandProcessor = new CommandProcessor(IoCBuilderAdapter.Build());
+            InterfaceContext.CommandProcessor = new CommandProcessor(ioc);
+
+        if (onStart != null)
+            foreach (OnStartEventHandler start in onStart.GetInvocationList())
+                await start(ioc, customBackgroundWorkersCts.Token);
 
         CommandLineInterface commandInterface = new(InterfaceContext);
+        await commandInterface.RunAsync(args, cancellationToken);
 
-        await commandInterface.StartAsync(args, cancellationToken);
+        if (onStop != null)
+            foreach (OnStopEventHandler stop in onStop.GetInvocationList())
+                await stop(ioc);
+
+        customBackgroundWorkersCts.Cancel();
     }
 }
