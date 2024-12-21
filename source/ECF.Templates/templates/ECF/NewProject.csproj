@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ECF" Version="1.0.5" />
+    <PackageReference Include="ECF" Version="1.0.6" />
   </ItemGroup>
 
   <ItemGroup>

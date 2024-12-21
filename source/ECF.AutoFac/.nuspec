@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <metadata>
-        <id>EasyConsoleFramework.AutoFac</id>
-        <version>1.0.5</version>
-        <description>Easy Console Framewok - Framework for building command based IoC console application. This package is using AutoFac library for IoC.</description>
-        <authors>Aviuz</authors>
-        <tags>console IoC ecf autofac</tags>
+	<metadata>
+		<id>EasyConsoleFramework.AutoFac</id>
+		<version>1.0.6</version>
+		<description>Easy Console Framewok - Framework for building command based IoC console application. This package is using AutoFac library for IoC.</description>
+		<authors>Aviuz</authors>
+		<tags>console IoC ecf autofac</tags>
 
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <license type="expression">MIT</license>
-        <copyright>Copyright (c) Aviuz 2023</copyright>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<copyright>Copyright (c) Aviuz 2023</copyright>
 
-        <language>en-US</language>
-        <projectUrl>https://github.com/Aviuz/ECF</projectUrl>
-        <repository type="git" url="https://github.com/Aviuz/ECF.git" />
-        <readme>docs\README.md</readme>
+		<language>en-US</language>
+		<projectUrl>https://github.com/Aviuz/ECF</projectUrl>
+		<repository type="git" url="https://github.com/Aviuz/ECF.git" />
+		<readme>docs\README.md</readme>
 
-        <dependencies>
-            <group targetFramework="net6">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.5" />
-                <dependency id="Autofac" version="6.5.0" />
-				<dependency id="Microsoft.Extensions.Configuration.Json" version="6.0.0" />
-            </group>
-
-            <group targetFramework="net7">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.5" />
+		<dependencies>
+			<group targetFramework="net6">
+				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
 				<dependency id="Autofac" version="6.5.0" />
-                <dependency id="Microsoft.Extensions.Configuration.Json" version="7.0.0" />
-            </group>
+				<dependency id="Microsoft.Extensions.Configuration.Json" version="6.0.0" />
+			</group>
+
+			<group targetFramework="net7">
+				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
+				<dependency id="Autofac" version="6.5.0" />
+				<dependency id="Microsoft.Extensions.Configuration.Json" version="7.0.0" />
+			</group>
 
 			<group targetFramework="net8">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.5" />
+				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
 				<dependency id="Autofac" version="6.5.0" />
-				<dependency id="Microsoft.Extensions.Configuration.Json" version="8.0.0" />
+				<dependency id="Microsoft.Extensions.Configuration.Json" version="8.0.1" />
 			</group>
-        </dependencies>
-    </metadata>
 
-    <files>
-        <file src="..\..\README.md" target="docs\" />
-        
-        <file src="bin\Release\net6.0\ECF.Autofac.dll" target="lib\net6.0" />
-        <file src="bin\Release\net6.0\ECF.Autofac.pdb" target="lib\net6.0" />
-        <file src="bin\Release\net6.0\ECF.Autofac.deps.json" target="lib\net6.0" />
+			<group targetFramework="net9">
+				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
+				<dependency id="Autofac" version="6.5.0" />
+				<dependency id="Microsoft.Extensions.Configuration.Json" version="9.0.0" />
+			</group>
+		</dependencies>
+	</metadata>
 
-        <file src="bin\Release\net7.0\ECF.Autofac.dll" target="lib\net7.0" />
-        <file src="bin\Release\net7.0\ECF.Autofac.pdb" target="lib\net7.0" />
-        <file src="bin\Release\net7.0\ECF.Autofac.deps.json" target="lib\net7.0" />
+	<files>
+		<file src="..\..\README.md" target="docs\" />
 
-        <file src="bin\Release\net8.0\ECF.Autofac.dll" target="lib\net8.0" />
-        <file src="bin\Release\net8.0\ECF.Autofac.pdb" target="lib\net8.0" />
-        <file src="bin\Release\net8.0\ECF.Autofac.deps.json" target="lib\net8.0" />
-    </files>
+		<file src="bin\Release\net6.0\ECF.Autofac.dll" target="lib\net6.0" />
+		<file src="bin\Release\net6.0\ECF.Autofac.pdb" target="lib\net6.0" />
+		<file src="bin\Release\net6.0\ECF.Autofac.deps.json" target="lib\net6.0" />
+
+		<file src="bin\Release\net7.0\ECF.Autofac.dll" target="lib\net7.0" />
+		<file src="bin\Release\net7.0\ECF.Autofac.pdb" target="lib\net7.0" />
+		<file src="bin\Release\net7.0\ECF.Autofac.deps.json" target="lib\net7.0" />
+
+		<file src="bin\Release\net8.0\ECF.Autofac.dll" target="lib\net8.0" />
+		<file src="bin\Release\net8.0\ECF.Autofac.pdb" target="lib\net8.0" />
+		<file src="bin\Release\net8.0\ECF.Autofac.deps.json" target="lib\net8.0" />
+
+		<file src="bin\Release\net9.0\ECF.Autofac.dll" target="lib\net9.0" />
+		<file src="bin\Release\net9.0\ECF.Autofac.pdb" target="lib\net9.0" />
+		<file src="bin\Release\net9.0\ECF.Autofac.deps.json" target="lib\net9.0" />
+	</files>
 </package>
