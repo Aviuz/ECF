@@ -112,6 +112,19 @@ public string SourceFilePath { get; set; }
 [Argument(1, Name = "destination_file_path", Description = "destination file path that the file will be copied to, if not specified it will be copied to clipboard")]
 public string? DestinationFilePath { get; set; }
 ```
+## Hosted services
+You can start [hosted services](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services) in background, by installing additional package:
+```shell
+dotnet add package EasyConsoleFramework.HostedServices
+```
+and invoke AddHostedServices on `ECFHostBuilder`
+```csharp
+// Program.cs
+
+await new ECFHostBuilder()
+    // (...)
+    .AddHostedServices() 
+```
 
 # Examples
 For some other use cases please look into [Example Project](/source/Example).
