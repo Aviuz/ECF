@@ -65,6 +65,8 @@ public abstract class AsyncCommandBase : ICommand, IHaveHelp
 
             Console.WriteLine();
             Console.WriteLine($"CommandSyntax: {GetSyntaxExpression()}");
+
+            Environment.ExitCode = 400;
         }
         else
         {

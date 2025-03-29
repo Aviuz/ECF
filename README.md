@@ -126,6 +126,21 @@ await new ECFHostBuilder()
     .AddHostedServices() 
 ```
 
+## User exceptions
+You can mark exception type with `[UserException]` attribute to print user-friendly message, instead of standard exception string with stack trace. Additionally you can exit code and console color (of error message).
+
+```csharp
+[UserException(ExitCode = 2, ErrorTextColor = ConsoleColor.Yellow)]
+public class DatabaseOfflineException() 
+  : Exception("Database is offline, please try later.") { }
+```
+
+```bash
+> connect --database "my-database"
+
+Database is offline, please try later.
+```
+
 # Examples
 For some other use cases please look into [Example Project](/source/Example).
 

@@ -1,4 +1,5 @@
 using ECF.Utilities;
+using System.Reflection;
 
 namespace ECF.Engine;
 
@@ -24,13 +25,32 @@ public class CommandLineInterface
 
         if (args.Length > 0 || interfaceContext.DisablePrompting)
         {
-            cancellationController.StartNew();
-            await interfaceContext.CommandProcessor.ProcessAsync(args, cancellationController.SingleCommand);
+            try
+            {
+                cancellationController.StartNew();
+                await interfaceContext.CommandProcessor.ProcessAsync(args, cancellationController.SingleCommand);
+            }
+            catch (Exception ex)
+            {
+                var userExceptionAttr = ex.GetType().GetCustomAttribute<UserExceptionAttribute>();
+
+                if (userExceptionAttr != null)
+                {
+                    Environment.ExitCode = userExceptionAttr.ExitCode;
+                    ColorConsole.WriteLine(ex.Message, userExceptionAttr.ErrorTextColor);
+                    return;
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
         else
         {
             if (!string.IsNullOrWhiteSpace(interfaceContext.Intro))
                 Console.WriteLine(interfaceContext.Intro);
+
             while (!interfaceContext.ForceExit && !cancellationController.Root.IsCancellationRequested)
             {
                 if (interfaceContext.Prefix != null)
@@ -48,10 +68,21 @@ public class CommandLineInterface
                 }
                 catch (Exception ex)
                 {
-                    ColorConsole.WriteLine("Exception thrown:", ConsoleColor.Red);
-                    ColorConsole.WriteLine(ex.ToString(), ConsoleColor.Red);
+                    var userExceptionAttr = ex.GetType().GetCustomAttribute<UserExceptionAttribute>();
+
+                    if (userExceptionAttr != null)
+                    {
+                        ColorConsole.WriteLine(ex.Message, userExceptionAttr.ErrorTextColor);
+                    }
+                    else
+                    {
+                        ColorConsole.WriteLine("Unhandled exception has been thrown:", ConsoleColor.Red);
+                        ColorConsole.WriteLine(ex.ToString(), ConsoleColor.Red);
+                    }
                 }
             }
+
+            Environment.ExitCode = 0;
         }
     }
 }

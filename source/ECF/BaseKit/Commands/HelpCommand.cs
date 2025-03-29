@@ -29,6 +29,7 @@ public class HelpCommand : ICommand, IHaveHelp
         else if (isArgumentPresent)
         {
             Console.WriteLine($"Command not found: {args.Arguments[0]}. Type 'help' to list commands.");
+            Environment.ExitCode = 404;
         }
         else
         {

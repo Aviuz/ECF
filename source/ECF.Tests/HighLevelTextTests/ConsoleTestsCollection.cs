@@ -15,7 +15,7 @@ public class ConsoleSteamsFixture : IDisposable
 {
     public ConsoleSteamsFixture()
     {
-        InMemoryStream = new InputSteamMock(new MemoryStream());
+        InMemoryStream = new InputStreamMock(new MemoryStream());
         InMemoryReader = TextReader.Synchronized(new StreamReader(InMemoryStream, Encoding.UTF8));
         Console.SetIn(InMemoryReader);
 
@@ -33,7 +33,7 @@ public class ConsoleSteamsFixture : IDisposable
         InMemoryStream.ResetSemaphore();
     }
 
-    public InputSteamMock InMemoryStream { get; }
+    public InputStreamMock InMemoryStream { get; }
     public TextReader InMemoryReader { get; }
 
     public MemoryStream OutMemoryStream { get; }
@@ -60,12 +60,12 @@ public class ConsoleSteamsFixture : IDisposable
     }
 }
 
-public class InputSteamMock : MemoryStream
+public class InputStreamMock : MemoryStream
 {
     private readonly MemoryStream innerStream;
     private Semaphore semaphore = new(0, 100);
 
-    public InputSteamMock(MemoryStream innerStream)
+    public InputStreamMock(MemoryStream innerStream)
     {
         this.innerStream = innerStream;
     }
