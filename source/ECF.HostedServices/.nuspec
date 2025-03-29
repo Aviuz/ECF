@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>EasyConsoleFramework.HostedServices</id>
-		<version>1.0.6</version>
+		<version>1.0.7</version>
 		<description>Hosted Services plugin for Easy Console Framewok (ECF).</description>
 		<authors>Aviuz</authors>
 		<tags>console IoC ecf</tags>
@@ -18,17 +18,17 @@
 
 		<dependencies>
 			<group targetFramework="net6">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
+				<dependency id="EasyConsoleFramework.Base" version="1.0.7" />
 				<dependency id="Microsoft.Extensions.Hosting.Abstractions" version="6.0.0" />
 			</group>
 
 			<group targetFramework="net7">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
+				<dependency id="EasyConsoleFramework.Base" version="1.0.7" />
 				<dependency id="Microsoft.Extensions.Hosting.Abstractions" version="7.0.0" />
 			</group>
 
 			<group targetFramework="net8">
-				<dependency id="EasyConsoleFramework.Base" version="1.0.6" />
+				<dependency id="EasyConsoleFramework.Base" version="1.0.7" />
 				<dependency id="Microsoft.Extensions.Hosting.Abstractions" version="8.0.1" />
 			</group>
 		</dependencies>

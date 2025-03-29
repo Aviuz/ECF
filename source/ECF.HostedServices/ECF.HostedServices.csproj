@@ -4,7 +4,7 @@
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <RootNamespace>ECF.HostedServices</RootNamespace>
     <AssemblyName>ECF.HostedServices</AssemblyName>
   </PropertyGroup>
